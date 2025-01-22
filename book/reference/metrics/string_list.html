@@ -237,7 +237,7 @@ Glean.search.engines.add(&quot;duck duck go&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search::engines.Add(&quot;wikipedia&quot;_ns);
 mozilla::glean::search::engines.Add(&quot;duck duck go&quot;_ns);
@@ -301,7 +301,7 @@ search::engines.set(vec![&quot;wikipedia&quot;.to_string(), &quot;duck duck go&q
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck go&quot;_ns});
 </code></pre>
@@ -376,7 +376,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 ASSERT_EQUAL(mozilla::glean::search::engines.TestGetValue().isOk());
 nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue().unwrap();

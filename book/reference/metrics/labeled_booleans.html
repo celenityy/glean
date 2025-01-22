@@ -234,7 +234,7 @@ acessibility.features[&quot;high_contrast&quot;].set(this.isHighContrastEnabled(
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).Set(true);
 mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).Set(false);
@@ -328,7 +328,7 @@ assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue())
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 ASSERT_EQ(
     true,

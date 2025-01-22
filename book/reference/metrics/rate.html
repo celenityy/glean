@@ -323,7 +323,7 @@ network.httpConnectionError.addToDenominator(1);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkProtocolHttpMetrics.h&quot;
 
 if (aHadError) {
 mozilla::glean::network::http_connection_error.AddToNumerator(1);
@@ -403,7 +403,7 @@ assert.strictEqual(denominator, 1);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkProtocolHttpMetrics.h&quot;
 
 auto pair = mozilla::glean::network::http_connection_error.TestGetValue().unwrap();
 ASSERT_EQ(1, pair.first);

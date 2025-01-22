@@ -251,7 +251,7 @@ function onShowLogin() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 void OnShowLogin() {
   mozilla::glean::auth::login_time.Start();
   // ...
@@ -355,7 +355,7 @@ function onLogin() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 void OnLogin() {
   mozilla::glean::auth::login_time.Stop();
   // ...
@@ -436,7 +436,7 @@ function onLoginCancel() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 void OnLoginCancel() {
   mozilla::glean::auth::login_time.Cancel();
   // ...
@@ -569,7 +569,7 @@ e.g. if the Timespan's <code>time_unit</code> is <code>millisecond</code>,
 then the duration parameter is a count of milliseconds.</p>
 </blockquote>
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 
 void AfterLogin(uint32_t aDuration) {
   mozilla::glean::auth::login_time.SetRaw(aDuration);
@@ -638,7 +638,7 @@ assert(await auth.loginTime.testGetValue() &gt; 0);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 
 ASSERT_TRUE(mozilla::glean::auth::login_time.TestGetValue().isOk());
 ASSERT_GE(mozilla::glean::auth::login_time.TestGetValue().unwrap().value(), 0);

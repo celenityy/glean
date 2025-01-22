@@ -254,7 +254,7 @@ function allocateMemory() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/JsXpconnectMetrics.h&quot;
 
 mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
 </code></pre>
@@ -365,7 +365,7 @@ assert.equal(2, snapshot.count);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/JsXpconnectMetrics.h&quot;
 
 // Does it have an expected values?
 const data = mozilla::glean::memory::heap_allocated.TestGetValue().value().unwrap()

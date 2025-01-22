@@ -234,7 +234,7 @@ user.clientId.generateAndSet();
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/TelemetryMetrics.h&quot;
 
 // Generate a new UUID and record it.
 mozilla::glean::user::client_id.GenerateAndSet();
@@ -297,7 +297,7 @@ user.clientId.set(uuid);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/TelemetryMetrics.h&quot;
 
 // Set a specific value.
 nsCString kUuid(&quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;);
@@ -371,7 +371,7 @@ assert(uuid, await user.clientId.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/TelemetryMetrics.h&quot;
 
 // Is it clear of errors?
 ASSERT_TRUE(mozilla::glean::user::client_id.TestGetValue().isOk());

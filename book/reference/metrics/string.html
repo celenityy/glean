@@ -255,7 +255,7 @@ searchDefault.name.set(&quot;wikipedia&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
 </code></pre>
@@ -331,7 +331,7 @@ assert.strictEqual(&quot;wikipedia&quot;, await searchDefault.name.testGetValue(
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 // Is it clear of errors?
 ASSERT_TRUE(mozilla::glean::search_default::name.TestGetValue().isOk());

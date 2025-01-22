@@ -215,7 +215,7 @@ network::http3_late_ack_ratio
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 mozilla::glean::network::http3_late_ack_ratio
     .Get(&quot;ack&quot;)
@@ -266,7 +266,7 @@ network::http3_late_ack_ratio
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 mozilla::glean::network::http3_late_ack_ratio
     .Get(&quot;ack&quot;)
@@ -324,7 +324,7 @@ assert_eq!(1, network::http3_late_ack_ratio.get(&quot;ack&quot;).test_get_value(
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 auto data = mozilla::glean::network::http3_late_ack_ratio.Get(&quot;ack&quot;).TestGetValue().value();
 ASSERT_EQ(42UL, data.sum);

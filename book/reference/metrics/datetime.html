@@ -247,7 +247,7 @@ install.firstRun.set(new Date(&quot;March 25, 2019 00:00:00&quot;)); // Records 
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/ToolkitProfileMetrics.h&quot;
 
 PRExplodedTime date = {0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
 mozilla::glean::install::first_run.Set(&amp;date);
@@ -321,7 +321,7 @@ assert.deepStrictEqual(expectedDate, await install.firstRun.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/ToolkitProfileMetrics.h&quot;
 
 PRExplodedTime date{0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
 ASSERT_TRUE(mozilla::glean::install::first_run.TestGetValue().isOk());

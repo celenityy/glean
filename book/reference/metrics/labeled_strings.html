@@ -228,7 +228,7 @@ login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/DomWebauthnMetrics.h&quot;
 
 mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns).Set(&quot;Invalid password&quot;_ns);
 </code></pre>
@@ -317,7 +317,7 @@ assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsBySta
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/DomWebauthnMetrics.h&quot;
 
 ASSERT_STREQ(&quot;Invalid password&quot;,
              mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns)

@@ -246,7 +246,7 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordMgrMetrics.h&quot;
 
 using mozilla::glean::views::LoginOpenedExtra;
 LoginOpenedExtra extra = { .source_of_login = Some(&quot;value&quot;_ns) };
@@ -338,7 +338,7 @@ assert.strictEqual(&quot;toolbar&quot;, first.extra.source_of_login);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordMgrMetrics.h&quot;
 
 auto optEvents = mozilla::glean::views::login_opened.TestGetValue();
 auto events = optEvents.extract();

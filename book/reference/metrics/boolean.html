@@ -228,7 +228,7 @@ flags.a11yEnabled.set(this.isAccessibilityEnabled());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 mozilla::glean::flags::a11y_enabled.Set(false);
 </code></pre>
@@ -289,7 +289,7 @@ assert(await flags.a11yEnabled.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
 </code></pre>

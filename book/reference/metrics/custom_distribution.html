@@ -228,7 +228,7 @@ graphics.checkerboardPeak.accumulateSamples([23]);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
 </code></pre>
@@ -271,7 +271,7 @@ graphics.checkerboardPeak.accumulateSingleSample(23);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 mozilla::glean::graphics::checkerboard_peak.AccumulateSingleSample(23);
 </code></pre>
@@ -358,7 +358,7 @@ assert.equal(1, snapshot.values[19]);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 auto data = mozilla::glean::graphics::checkerboard_peak.TestGetValue().value();
 ASSERT_EQ(23UL, data.sum);

@@ -235,7 +235,7 @@ display.width.set(window.innerWidth);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 mozilla::glean::display::width.Set(innerWidth);
 </code></pre>
@@ -306,7 +306,7 @@ assert.strictEqual(433, await display.width.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 ASSERT_TRUE(mozilla::glean::display::width.TestGetValue().isOk());
 ASSERT_EQ(433, mozilla::glean::display::width.TestGetValue().unwrap().value());

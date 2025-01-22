@@ -1223,7 +1223,7 @@ This results in, for a metric defined in the <code>metrics.yaml</code> as:</p>
 </code></pre>
 <p>an identifier that looks like:</p>
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SomeMetrics.h&quot;
 
 mozilla::glean::compound_category::metric_name...
 </code></pre>
@@ -1514,7 +1514,7 @@ This results in, for a metric defined in the <code>metrics.yaml</code> as:</p>
 </code></pre>
 <p>an identifier that looks like:</p>
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SomeMetrics.h&quot;
 
 mozilla::glean::compound_category::metric_name...
 </code></pre>
@@ -5532,7 +5532,7 @@ flags.a11yEnabled.set(this.isAccessibilityEnabled());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 mozilla::glean::flags::a11y_enabled.Set(false);
 </code></pre>
@@ -5593,7 +5593,7 @@ assert(await flags.a11yEnabled.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 ASSERT_EQ(false, mozilla::glean::flags::a11y_enabled.TestGetValue().value());
 </code></pre>
@@ -5731,7 +5731,7 @@ acessibility.features[&quot;high_contrast&quot;].set(this.isHighContrastEnabled(
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 mozilla::glean::accessibility::features.Get(&quot;screen_reader&quot;_ns).Set(true);
 mozilla::glean::accessibility::features.Get(&quot;high_contrast&quot;_ns).Set(false);
@@ -5825,7 +5825,7 @@ assert(!(await accessibility.features[&quot;high_contrast&quot;].testGetValue())
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/AccessibleMetrics.h&quot;
 
 ASSERT_EQ(
     true,
@@ -6024,7 +6024,7 @@ controls.refreshPressed.add(5); // Adds 5 to the counter.
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/UrlbarMetrics.h&quot;
 
 mozilla::glean::controls::refresh_pressed.Add(1);
 mozilla::glean::controls::refresh_pressed.Add(5);
@@ -6094,7 +6094,7 @@ assert.strictEqual(6, await controls.refreshPressed.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/UrlbarMetrics.h&quot;
 
 ASSERT_TRUE(mozilla::glean::controls::refresh_pressed.TestGetValue().isOk());
 ASSERT_EQ(6, mozilla::glean::controls::refresh_pressed.TestGetValue().unwrap().value());
@@ -6257,7 +6257,7 @@ stability.crashCount[&quot;native_code_crash&quot;].add(3);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/CrashesMetrics.h&quot;
 
 mozilla::glean::stability::crash_count.Get(&quot;uncaught_exception&quot;_ns).Add(1);
 mozilla::glean::stability::crash_count.Get(&quot;native_code_crash&quot;_ns).Add(3);
@@ -6356,7 +6356,7 @@ assert.strictEqual(3, await stability.crashCount[&quot;native_code_crash&quot;].
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/CrashesMetrics.h&quot;
 
 ASSERT_EQ(
     1,
@@ -6564,7 +6564,7 @@ searchDefault.name.set(&quot;wikipedia&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search_default::name.Set(&quot;wikipedia&quot;_ns);
 </code></pre>
@@ -6640,7 +6640,7 @@ assert.strictEqual(&quot;wikipedia&quot;, await searchDefault.name.testGetValue(
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 // Is it clear of errors?
 ASSERT_TRUE(mozilla::glean::search_default::name.TestGetValue().isOk());
@@ -6804,7 +6804,7 @@ login.errorsByStage[&quot;server_auth&quot;].set(&quot;Invalid password&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/DomWebauthnMetrics.h&quot;
 
 mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns).Set(&quot;Invalid password&quot;_ns);
 </code></pre>
@@ -6893,7 +6893,7 @@ assert.strictEqual(&quot;Invalid password&quot;, await metrics.login.errorsBySta
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/DomWebauthnMetrics.h&quot;
 
 ASSERT_STREQ(&quot;Invalid password&quot;,
              mozilla::glean::login::errors_by_stage.Get(&quot;server_auth&quot;_ns)
@@ -7080,7 +7080,7 @@ Glean.search.engines.add(&quot;duck duck go&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search::engines.Add(&quot;wikipedia&quot;_ns);
 mozilla::glean::search::engines.Add(&quot;duck duck go&quot;_ns);
@@ -7144,7 +7144,7 @@ search::engines.set(vec![&quot;wikipedia&quot;.to_string(), &quot;duck duck go&q
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search::engines.Set({&quot;wikipedia&quot;_ns, &quot;duck duck go&quot;_ns});
 </code></pre>
@@ -7219,7 +7219,7 @@ Assert.ok(engines.includes(&quot;duck duck go&quot;));
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 ASSERT_EQUAL(mozilla::glean::search::engines.TestGetValue().isOk());
 nsTArray&lt;nsCString&gt; list = mozilla::glean::search::engines.TestGetValue().unwrap();
@@ -7383,7 +7383,7 @@ function onShowLogin() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 void OnShowLogin() {
   mozilla::glean::auth::login_time.Start();
   // ...
@@ -7487,7 +7487,7 @@ function onLogin() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 void OnLogin() {
   mozilla::glean::auth::login_time.Stop();
   // ...
@@ -7568,7 +7568,7 @@ function onLoginCancel() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 void OnLoginCancel() {
   mozilla::glean::auth::login_time.Cancel();
   // ...
@@ -7701,7 +7701,7 @@ e.g. if the Timespan's <code>time_unit</code> is <code>millisecond</code>,
 then the duration parameter is a count of milliseconds.</p>
 </blockquote>
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 
 void AfterLogin(uint32_t aDuration) {
   mozilla::glean::auth::login_time.SetRaw(aDuration);
@@ -7770,7 +7770,7 @@ assert(await auth.loginTime.testGetValue() &gt; 0);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordmgrMetrics.h&quot;
 
 ASSERT_TRUE(mozilla::glean::auth::login_time.TestGetValue().isOk());
 ASSERT_GE(mozilla::glean::auth::login_time.TestGetValue().unwrap().value(), 0);
@@ -7986,7 +7986,7 @@ function onPageStart() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DomMetrics.h&quot;
 
 auto timerId = mozilla::glean::pages::page_load.Start();
 </code></pre>
@@ -8054,7 +8054,7 @@ function onPageLoaded() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DomMetrics.h&quot;
 
 mozilla::glean::pages::page_load.StopAndAccumulate(std::move(timerId));
 </code></pre>
@@ -8121,7 +8121,7 @@ function onPageLoaded() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DomMetrics.h&quot;
 
 mozilla::glean::pages::page_load.AccumulateRawSamples(samples);
 </code></pre>
@@ -8190,7 +8190,7 @@ function onPageLoaded() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DomMetrics.h&quot;
 
 mozilla::glean::pages::page_load.AccumulateRawDuration(aDuration);
 </code></pre>
@@ -8305,7 +8305,7 @@ function onPageError() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DomMetrics.h&quot;
 
 mozilla::glean::pages::page_load.Cancel(std::move(timerId));
 </code></pre>
@@ -8407,7 +8407,7 @@ assert.equal(1, snapshot.count);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DomMetrics.h&quot;
 
 // Does it have an expected values?
 const data = mozilla::glean::pages::page_load.TestGetValue().value().unwrap();
@@ -8643,7 +8643,7 @@ self.start = devtools::cold_toolbox_open_delay
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
 
 auto timerId = mozilla::glean::devtools::cold_toolbox_open_delay
     .Get(toolbox_id)
@@ -8686,7 +8686,7 @@ devtools::cold_toolbox_open_delay
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
 
 mozilla::glean::devtools::cold_toolbox_open_delay
     .Get(toolbox_id)
@@ -8728,7 +8728,7 @@ devtools::cold_toolbox_open_delay
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
 
 mozilla::glean::devtools::cold_toolbox_open_delay
     .Get(toolbox_id)
@@ -8780,7 +8780,7 @@ devtools::cold_toolbox_open_delay
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
 
 mozilla::glean::devtools::cold_toolbox_open_delay
     .Get(toolbox_id)
@@ -8834,7 +8834,7 @@ devtools::cold_toolbox_open_delay
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
 
 mozilla::glean::devtools::cold_toolbox_open_delay
     .Get(toolboxId)
@@ -8887,7 +8887,7 @@ assert_ge!(400, snapshot.sum);
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
 
 const data = mozilla::glean::devtools::cold_toolbox_open_delay
     .Get(&quot;webconsole&quot;_ns)
@@ -9100,7 +9100,7 @@ function allocateMemory() {
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/JsXpconnectMetrics.h&quot;
 
 mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
 </code></pre>
@@ -9211,7 +9211,7 @@ assert.equal(2, snapshot.count);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/JsXpconnectMetrics.h&quot;
 
 // Does it have an expected values?
 const data = mozilla::glean::memory::heap_allocated.TestGetValue().value().unwrap()
@@ -9420,7 +9420,7 @@ network::http_upload_bandwidth
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 mozilla::network::http_upload_bandwidth
     .Get(httpVersion)
@@ -9473,7 +9473,7 @@ assert_eq!(1, network::http_upload_bandwidth.get(&quot;h2&quot;).test_get_value(
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 const data = mozilla::glean::network::http_upload_bandwidth
     .Get(&quot;h2&quot;)
@@ -9645,7 +9645,7 @@ user.clientId.generateAndSet();
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/TelemetryMetrics.h&quot;
 
 // Generate a new UUID and record it.
 mozilla::glean::user::client_id.GenerateAndSet();
@@ -9708,7 +9708,7 @@ user.clientId.set(uuid);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/TelemetryMetrics.h&quot;
 
 // Set a specific value.
 nsCString kUuid(&quot;decafdec-afde-cafd-ecaf-decafdecafde&quot;);
@@ -9782,7 +9782,7 @@ assert(uuid, await user.clientId.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/TelemetryMetrics.h&quot;
 
 // Is it clear of errors?
 ASSERT_TRUE(mozilla::glean::user::client_id.TestGetValue().isOk());
@@ -9951,7 +9951,7 @@ search.template.set(&quot;https://mysearchengine.com/&quot;);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/SearchMetrics.h&quot;
 
 mozilla::glean::search::template.Set(&quot;https://mysearchengine.com/&quot;_ns);
 </code></pre>
@@ -10219,7 +10219,7 @@ install.firstRun.set(new Date(&quot;March 25, 2019 00:00:00&quot;)); // Records 
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/ToolkitProfileMetrics.h&quot;
 
 PRExplodedTime date = {0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
 mozilla::glean::install::first_run.Set(&amp;date);
@@ -10293,7 +10293,7 @@ assert.deepStrictEqual(expectedDate, await install.firstRun.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/ToolkitProfileMetrics.h&quot;
 
 PRExplodedTime date{0, 35, 10, 12, 6, 10, 2020, 0, 0, {5 * 60 * 60, 0}};
 ASSERT_TRUE(mozilla::glean::install::first_run.TestGetValue().isOk());
@@ -10520,7 +10520,7 @@ views.loginOpened.record({ sourceOfLogin: &quot;toolbar&quot; });
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordMgrMetrics.h&quot;
 
 using mozilla::glean::views::LoginOpenedExtra;
 LoginOpenedExtra extra = { .source_of_login = Some(&quot;value&quot;_ns) };
@@ -10612,7 +10612,7 @@ assert.strictEqual(&quot;toolbar&quot;, first.extra.source_of_login);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-c++">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-c++">#include &quot;mozilla/glean/PasswordMgrMetrics.h&quot;
 
 auto optEvents = mozilla::glean::views::login_opened.TestGetValue();
 auto events = optEvents.extract();
@@ -10816,7 +10816,7 @@ graphics.checkerboardPeak.accumulateSamples([23]);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
 </code></pre>
@@ -10859,7 +10859,7 @@ graphics.checkerboardPeak.accumulateSingleSample(23);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 mozilla::glean::graphics::checkerboard_peak.AccumulateSingleSample(23);
 </code></pre>
@@ -10946,7 +10946,7 @@ assert.equal(1, snapshot.values[19]);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 auto data = mozilla::glean::graphics::checkerboard_peak.TestGetValue().value();
 ASSERT_EQ(23UL, data.sum);
@@ -11149,7 +11149,7 @@ network::http3_late_ack_ratio
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 mozilla::glean::network::http3_late_ack_ratio
     .Get(&quot;ack&quot;)
@@ -11200,7 +11200,7 @@ network::http3_late_ack_ratio
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 mozilla::glean::network::http3_late_ack_ratio
     .Get(&quot;ack&quot;)
@@ -11258,7 +11258,7 @@ assert_eq!(1, network::http3_late_ack_ratio.get(&quot;ack&quot;).test_get_value(
 <div data-lang="JavaScript" class="tab"></div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkMetrics.h&quot;
 
 auto data = mozilla::glean::network::http3_late_ack_ratio.Get(&quot;ack&quot;).TestGetValue().value();
 ASSERT_EQ(42UL, data.sum);
@@ -11438,7 +11438,7 @@ display.width.set(window.innerWidth);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 mozilla::glean::display::width.Set(innerWidth);
 </code></pre>
@@ -11509,7 +11509,7 @@ assert.strictEqual(433, await display.width.testGetValue());
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/GfxMetrics.h&quot;
 
 ASSERT_TRUE(mozilla::glean::display::width.TestGetValue().isOk());
 ASSERT_EQ(433, mozilla::glean::display::width.TestGetValue().unwrap().value());
@@ -11932,7 +11932,7 @@ network.httpConnectionError.addToDenominator(1);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkProtocolHttpMetrics.h&quot;
 
 if (aHadError) {
 mozilla::glean::network::http_connection_error.AddToNumerator(1);
@@ -12012,7 +12012,7 @@ assert.strictEqual(denominator, 1);
 </div>
 <div data-lang="Firefox Desktop" class="tab">
 <p><strong>C++</strong></p>
-<pre><code class="language-cpp">#include &quot;mozilla/glean/GleanMetrics.h&quot;
+<pre><code class="language-cpp">#include &quot;mozilla/glean/NetwerkProtocolHttpMetrics.h&quot;
 
 auto pair = mozilla::glean::network::http_connection_error.TestGetValue().unwrap();
 ASSERT_EQ(1, pair.first);
