@@ -424,6 +424,33 @@ mozilla::glean::devtools::cold_toolbox_open_delay
 </ul>
 </li>
 </ul>
+<h3 id="measure"><a class="header" href="#measure"><code>measure</code></a></h3>
+<p>For convenience one can measure the time of a function or block of code.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab"></div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab">
+<p><strong>C++</strong></p>
+<pre><code class="language-c++">#include &quot;mozilla/glean/DevtoolsClientFrameworkMetrics.h&quot;
+
+{ // Scope for RAII
+  auto timer = mozilla::glean::devtools::cold_toolbox_open_delay
+      .Get(toolboxId)
+      .Measure();
+  // Open the toolbox. Cold.
+}
+</code></pre>
+<p><strong>JavaScript</strong></p>
+<p><em>Not currently implemented.</em></p>
+</div>
+</div>
+</div>
 <h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given label in a labeled timing distribution metric.
