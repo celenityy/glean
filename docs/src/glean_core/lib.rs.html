@@ -1339,11 +1339,13 @@
 <a href="#1338" id="1338">1338</a>
 <a href="#1339" id="1339">1339</a>
 <a href="#1340" id="1340">1340</a>
+<a href="#1341" id="1341">1341</a>
 </pre></div><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-</span><span class="attr">#![allow(clippy::significant_drop_in_scrutinee)]
+</span><span class="attr">#![allow(clippy::doc_overindented_list_items)]
+#![allow(clippy::significant_drop_in_scrutinee)]
 #![allow(clippy::uninlined_format_args)]
 #![deny(rustdoc::broken_intra_doc_links)]
 #![deny(missing_docs)]
@@ -1752,7 +1754,7 @@
                 <span class="comment">// The debug view tag might have been set before initialize,
                 // get the cached value and set it.
                 </span><span class="kw">let </span>debug_tag = PRE_INIT_DEBUG_VIEW_TAG.lock().unwrap();
-                <span class="kw">if </span>debug_tag.len() &gt; <span class="number">0 </span>{
+                <span class="kw">if </span>!debug_tag.is_empty() {
                     glean.set_debug_view_tag(<span class="kw-2">&amp;</span>debug_tag);
                 }
 
@@ -1766,7 +1768,7 @@
                 <span class="comment">// The source tags might have been set before initialize,
                 // get the cached value and set them.
                 </span><span class="kw">let </span>source_tags = PRE_INIT_SOURCE_TAGS.lock().unwrap();
-                <span class="kw">if </span>source_tags.len() &gt; <span class="number">0 </span>{
+                <span class="kw">if </span>!source_tags.is_empty() {
                     glean.set_source_tags(source_tags.to_vec());
                 }
 
