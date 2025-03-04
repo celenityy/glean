@@ -84,15 +84,13 @@ module.</p></div>
 
     def do_upload(
         self,
-        path: str,
-        data: bytes,
-        headers: Dict[str, str],
-        config: &#34;Configuration&#34;,
+        capable_request: &#34;CapablePingUploadRequest&#34;,
     ) -&gt; Union[
         UploadResult,
         UploadResult.UNRECOVERABLE_FAILURE,
         UploadResult.RECOVERABLE_FAILURE,
         UploadResult.HTTP_STATUS,
+        UploadResult.INCAPABLE,
     ]:
         &#34;&#34;&#34;
         This function triggers the actual upload.
@@ -100,20 +98,13 @@ module.</p></div>
         It logs the ping and calls the implementation-specific upload function.
 
         Args:
-            url (str): The URL path to upload the data to.
-            data (bytes): The serialized data to send.
-            headers (dict of (str, str)): Dictionary of header entries.
-            config (glean.Configuration): The Glean Configuration object.
+            capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
 
         Returns:
             result (UploadResult): the status code of the upload response.
         &#34;&#34;&#34;
 
-        return self.upload(
-            url=config.server_endpoint + path,
-            data=data,
-            headers=headers,
-        )</code></pre>
+        return self.upload(capable_request)</code></pre>
 </details>
 <div class="desc"><p>The logic for uploading pings. This leaves the actual upload implementation
 to the user-provided delegate.</p></div>
@@ -131,7 +122,7 @@ to the user-provided delegate.</p></div>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.net.BaseUploader.do_upload"><code class="name flex">
-<span>def <span class="ident">do_upload</span></span>(<span>self, path: str, data: bytes, headers: Dict[str, str], config: Configuration) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS</span>
+<span>def <span class="ident">do_upload</span></span>(<span>self, capable_request: CapablePingUploadRequest) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS | glean._uniffi.glean.UploadResult.INCAPABLE</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -140,15 +131,13 @@ to the user-provided delegate.</p></div>
 </summary>
 <pre><code class="python">def do_upload(
     self,
-    path: str,
-    data: bytes,
-    headers: Dict[str, str],
-    config: &#34;Configuration&#34;,
+    capable_request: &#34;CapablePingUploadRequest&#34;,
 ) -&gt; Union[
     UploadResult,
     UploadResult.UNRECOVERABLE_FAILURE,
     UploadResult.RECOVERABLE_FAILURE,
     UploadResult.HTTP_STATUS,
+    UploadResult.INCAPABLE,
 ]:
     &#34;&#34;&#34;
     This function triggers the actual upload.
@@ -156,32 +145,20 @@ to the user-provided delegate.</p></div>
     It logs the ping and calls the implementation-specific upload function.
 
     Args:
-        url (str): The URL path to upload the data to.
-        data (bytes): The serialized data to send.
-        headers (dict of (str, str)): Dictionary of header entries.
-        config (glean.Configuration): The Glean Configuration object.
+        capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
 
     Returns:
         result (UploadResult): the status code of the upload response.
     &#34;&#34;&#34;
 
-    return self.upload(
-        url=config.server_endpoint + path,
-        data=data,
-        headers=headers,
-    )</code></pre>
+    return self.upload(capable_request)</code></pre>
 </details>
 <div class="desc"><p>This function triggers the actual upload.</p>
 <p>It logs the ping and calls the implementation-specific upload function.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>The URL path to upload the data to.</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>bytes</code></dt>
-<dd>The serialized data to send.</dd>
-<dt>headers (dict of (str, str)): Dictionary of header entries.</dt>
-<dt><strong><code>config</code></strong> :&ensp;<code><a title="glean.Configuration" href="../index.html#glean.Configuration">Configuration</a></code></dt>
-<dd>The Glean Configuration object.</dd>
+<dt><strong><code>capable_request</code></strong> :&ensp;<code>CapablePingUploadRequest</code></dt>
+<dd>The ping upload request, locked behind a capability check.</dd>
 </dl>
 <h2 id="returns">Returns</h2>
 <p>result (UploadResult): the status code of the upload response.</p></div>
@@ -211,21 +188,29 @@ to the user-provided delegate.</p></div>
 
     @classmethod
     def upload(
-        cls, url: str, data: bytes, headers: Dict[str, str]
+        cls, capable_request: CapablePingUploadRequest
     ) -&gt; Union[
         UploadResult,
         UploadResult.UNRECOVERABLE_FAILURE,
         UploadResult.RECOVERABLE_FAILURE,
         UploadResult.HTTP_STATUS,
+        UploadResult.INCAPABLE,
     ]:
         &#34;&#34;&#34;
         Synchronously upload a ping to a server.
 
         Args:
-            url (str): The URL path to upload the data to.
-            data (str): The serialized text data to send.
-            headers (dict of (str, str)): HTTP headers to send.
+            capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
         &#34;&#34;&#34;
+        # This uploader has no special capabilities.
+        request = capable_request.capable(lambda capabilities: len(capabilities) == 0)
+        if request is None:
+            return UploadResult.INCAPABLE(0)
+
+        url = request.url
+        data = request.body
+        headers = request.headers
+
         parsed_url = urllib.parse.urlparse(url)
         if parsed_url.scheme == &#34;http&#34;:
             conn = http.client.HTTPConnection(
@@ -287,18 +272,15 @@ to the user-provided delegate.</p></div>
 <h3>Static methods</h3>
 <dl>
 <dt id="glean.net.HttpClientUploader.upload"><code class="name flex">
-<span>def <span class="ident">upload</span></span>(<span>url: str, data: bytes, headers: Dict[str, str]) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS</span>
+<span>def <span class="ident">upload</span></span>(<span>capable_request: <a title="glean.net.ping_upload_worker.CapablePingUploadRequest" href="ping_upload_worker.html#glean.net.ping_upload_worker.CapablePingUploadRequest">CapablePingUploadRequest</a>) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS | glean._uniffi.glean.UploadResult.INCAPABLE</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Synchronously upload a ping to a server.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>The URL path to upload the data to.</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>str</code></dt>
-<dd>The serialized text data to send.</dd>
-</dl>
-<p>headers (dict of (str, str)): HTTP headers to send.</p></div>
+<dt><strong><code>capable_request</code></strong> :&ensp;<code>CapablePingUploadRequest</code></dt>
+<dd>The ping upload request, locked behind a capability check.</dd>
+</dl></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -385,20 +367,19 @@ directory.</p></div>
 </summary>
 <pre><code class="python">class PingUploader(Protocol):
     def upload(
-        self, url: str, data: bytes, headers: Dict[str, str]
+        self, capable_request: CapablePingUploadRequest
     ) -&gt; Union[
         UploadResult,
         UploadResult.UNRECOVERABLE_FAILURE,
         UploadResult.RECOVERABLE_FAILURE,
         UploadResult.HTTP_STATUS,
+        UploadResult.INCAPABLE,
     ]:
         &#34;&#34;&#34;
         Upload a ping to a server.
 
         Args:
-            url (str): The URL path to upload the data to.
-            data (bytes): The serialized data to send.
-            headers (dict of (str, str)): Dictionary of header entries.
+            capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
 
         Returns:
             result (UploadResult): the status code of the upload response.
@@ -442,7 +423,7 @@ Protocol classes can be generic, they are defined as::</p>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.net.PingUploader.upload"><code class="name flex">
-<span>def <span class="ident">upload</span></span>(<span>self, url: str, data: bytes, headers: Dict[str, str]) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS</span>
+<span>def <span class="ident">upload</span></span>(<span>self,<br>capable_request: <a title="glean.net.ping_upload_worker.CapablePingUploadRequest" href="ping_upload_worker.html#glean.net.ping_upload_worker.CapablePingUploadRequest">CapablePingUploadRequest</a>) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS | glean._uniffi.glean.UploadResult.INCAPABLE</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -450,20 +431,19 @@ Protocol classes can be generic, they are defined as::</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def upload(
-    self, url: str, data: bytes, headers: Dict[str, str]
+    self, capable_request: CapablePingUploadRequest
 ) -&gt; Union[
     UploadResult,
     UploadResult.UNRECOVERABLE_FAILURE,
     UploadResult.RECOVERABLE_FAILURE,
     UploadResult.HTTP_STATUS,
+    UploadResult.INCAPABLE,
 ]:
     &#34;&#34;&#34;
     Upload a ping to a server.
 
     Args:
-        url (str): The URL path to upload the data to.
-        data (bytes): The serialized data to send.
-        headers (dict of (str, str)): Dictionary of header entries.
+        capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
 
     Returns:
         result (UploadResult): the status code of the upload response.
@@ -473,12 +453,9 @@ Protocol classes can be generic, they are defined as::</p>
 <div class="desc"><p>Upload a ping to a server.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>The URL path to upload the data to.</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>bytes</code></dt>
-<dd>The serialized data to send.</dd>
+<dt><strong><code>capable_request</code></strong> :&ensp;<code>CapablePingUploadRequest</code></dt>
+<dd>The ping upload request, locked behind a capability check.</dd>
 </dl>
-<p>headers (dict of (str, str)): Dictionary of header entries.</p>
 <h2 id="returns">Returns</h2>
 <p>result (UploadResult): the status code of the upload response.</p></div>
 </dd>

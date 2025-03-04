@@ -1947,6 +1947,33 @@
 <a href="#1946" id="1946">1946</a>
 <a href="#1947" id="1947">1947</a>
 <a href="#1948" id="1948">1948</a>
+<a href="#1949" id="1949">1949</a>
+<a href="#1950" id="1950">1950</a>
+<a href="#1951" id="1951">1951</a>
+<a href="#1952" id="1952">1952</a>
+<a href="#1953" id="1953">1953</a>
+<a href="#1954" id="1954">1954</a>
+<a href="#1955" id="1955">1955</a>
+<a href="#1956" id="1956">1956</a>
+<a href="#1957" id="1957">1957</a>
+<a href="#1958" id="1958">1958</a>
+<a href="#1959" id="1959">1959</a>
+<a href="#1960" id="1960">1960</a>
+<a href="#1961" id="1961">1961</a>
+<a href="#1962" id="1962">1962</a>
+<a href="#1963" id="1963">1963</a>
+<a href="#1964" id="1964">1964</a>
+<a href="#1965" id="1965">1965</a>
+<a href="#1966" id="1966">1966</a>
+<a href="#1967" id="1967">1967</a>
+<a href="#1968" id="1968">1968</a>
+<a href="#1969" id="1969">1969</a>
+<a href="#1970" id="1970">1970</a>
+<a href="#1971" id="1971">1971</a>
+<a href="#1972" id="1972">1972</a>
+<a href="#1973" id="1973">1973</a>
+<a href="#1974" id="1974">1974</a>
+<a href="#1975" id="1975">1975</a>
 </pre></div><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -2280,6 +2307,7 @@
             headers,
             body_has_info_sections,
             ping_name,
+            uploader_capabilities,
         } = ping;
         <span class="kw">let </span><span class="kw-2">mut </span>request = PingRequest::builder(
             <span class="kw-2">&amp;</span><span class="self">self</span>.language_binding_name,
@@ -2289,7 +2317,8 @@
         .path(path)
         .body(body)
         .body_has_info_sections(body_has_info_sections)
-        .ping_name(ping_name);
+        .ping_name(ping_name)
+        .uploader_capabilities(uploader_capabilities);
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(headers) = headers {
             request = request.headers(headers);
@@ -2691,7 +2720,7 @@
                 <span class="self">self</span>.directory_manager.delete_file(document_id);
             }
 
-            UnrecoverableFailure { .. } | HttpStatus { code: <span class="number">400</span>..=<span class="number">499 </span>} =&gt; {
+            UnrecoverableFailure { .. } | HttpStatus { code: <span class="number">400</span>..=<span class="number">499 </span>} | Incapable { .. } =&gt; {
                 <span class="macro">log::warn!</span>(
                     <span class="string">"Unrecoverable upload failure while attempting to send ping {}. Error was {:?}"</span>,
                     document_id,
@@ -2838,6 +2867,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"ping-name"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
 
@@ -2865,6 +2895,7 @@
                     headers: <span class="prelude-val">None</span>,
                     body_has_info_sections: <span class="bool-val">true</span>,
                     ping_name: <span class="string">"ping-name"</span>.into(),
+                    uploader_capabilities: <span class="macro">vec!</span>[],
                 },
             );
         }
@@ -2903,6 +2934,7 @@
                     headers: <span class="prelude-val">None</span>,
                     body_has_info_sections: <span class="bool-val">true</span>,
                     ping_name: <span class="string">"ping-name"</span>.into(),
+                    uploader_capabilities: <span class="macro">vec!</span>[],
                 },
             );
         }
@@ -2923,6 +2955,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"ping-name"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
 
@@ -2956,6 +2989,7 @@
                     headers: <span class="prelude-val">None</span>,
                     body_has_info_sections: <span class="bool-val">true</span>,
                     ping_name: <span class="string">"ping-name"</span>.into(),
+                    uploader_capabilities: <span class="macro">vec!</span>[],
                 },
             );
         }
@@ -2985,6 +3019,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3027,6 +3062,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3067,6 +3103,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3107,6 +3144,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3147,6 +3185,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3189,6 +3228,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3239,6 +3279,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"test-ping"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
 
@@ -3259,6 +3300,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"test-ping"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
 
@@ -3307,6 +3349,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3343,6 +3386,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"test-ping"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
         upload_manager.enqueue_ping(
@@ -3354,6 +3398,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"test-ping"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
 
@@ -3383,6 +3428,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3443,6 +3489,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3524,6 +3571,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3606,6 +3654,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3690,6 +3739,7 @@
             <span class="macro">vec!</span>[],
             <span class="macro">vec!</span>[],
             <span class="bool-val">true</span>,
+            <span class="macro">vec!</span>[],
         );
         glean.register_ping_type(<span class="kw-2">&amp;</span>ping_type);
 
@@ -3790,6 +3840,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"ping-name"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
         upload_manager.enqueue_ping(
@@ -3801,6 +3852,7 @@
                 headers: <span class="prelude-val">None</span>,
                 body_has_info_sections: <span class="bool-val">true</span>,
                 ping_name: <span class="string">"ping-name"</span>.into(),
+                uploader_capabilities: <span class="macro">vec!</span>[],
             },
         );
 
@@ -3866,6 +3918,7 @@
             headers: <span class="prelude-val">None</span>,
             body_has_info_sections: <span class="bool-val">true</span>,
             ping_name: <span class="string">"ping-name"</span>.into(),
+            uploader_capabilities: <span class="macro">vec!</span>[],
         };
         upload_manager.enqueue_ping(<span class="kw-2">&amp;</span>glean, ping);
         <span class="macro">assert!</span>(upload_manager.get_upload_task(<span class="kw-2">&amp;</span>glean, <span class="bool-val">false</span>).is_upload());
@@ -3878,6 +3931,7 @@
             headers: <span class="prelude-val">None</span>,
             body_has_info_sections: <span class="bool-val">true</span>,
             ping_name: <span class="string">"ping-name"</span>.into(),
+            uploader_capabilities: <span class="macro">vec!</span>[],
         };
         upload_manager.enqueue_ping(<span class="kw-2">&amp;</span>glean, ping);
 

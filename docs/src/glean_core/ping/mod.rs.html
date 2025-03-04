@@ -478,6 +478,10 @@
 <a href="#477" id="477">477</a>
 <a href="#478" id="478">478</a>
 <a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
 </pre></div><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -514,6 +518,8 @@
     </span><span class="kw">pub </span>includes_info_sections: bool,
     <span class="doccomment">/// Other pings that should be scheduled when this ping is sent.
     </span><span class="kw">pub </span>schedules_pings: Vec&lt;String&gt;,
+    <span class="doccomment">/// Capabilities the uploader must have in order to uplaoad this ping.
+    </span><span class="kw">pub </span>uploader_capabilities: Vec&lt;String&gt;,
 }
 
 <span class="doccomment">/// Collect a ping's data, assemble it into its full payload and store it on disk.
@@ -814,6 +820,7 @@
             headers: <span class="self">self</span>.get_headers(glean),
             includes_info_sections: ping.include_info_sections(),
             schedules_pings: ping.schedules_pings().to_vec(),
+            uploader_capabilities: ping.uploader_capabilities().to_vec(),
         })
     }
 
@@ -872,6 +879,7 @@
                 </span>headers: <span class="prelude-val">Some</span>(ping.headers.clone()),
                 body_has_info_sections: <span class="prelude-val">Some</span>(ping.includes_info_sections),
                 ping_name: <span class="prelude-val">Some</span>(ping.name.to_string()),
+                uploader_capabilities: <span class="prelude-val">Some</span>(ping.uploader_capabilities.clone()),
             };
             file.write_all(::serde_json::to_string(<span class="kw-2">&amp;</span>metadata)<span class="question-mark">?</span>.as_bytes())<span class="question-mark">?</span>;
         }

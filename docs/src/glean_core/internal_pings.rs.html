@@ -83,6 +83,10 @@
 <a href="#82" id="82">82</a>
 <a href="#83" id="83">83</a>
 <a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
 </pre></div><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -120,6 +124,7 @@
                     <span class="string">"inactive"</span>.to_string(),
                 ],
                 <span class="bool-val">true</span>,
+                <span class="macro">vec!</span>[],
             ),
             metrics: PingType::new(
                 <span class="string">"metrics"</span>,
@@ -137,6 +142,7 @@
                     <span class="string">"upgrade"</span>.to_string(),
                 ],
                 <span class="bool-val">true</span>,
+                <span class="macro">vec!</span>[],
             ),
             events: PingType::new(
                 <span class="string">"events"</span>,
@@ -152,6 +158,7 @@
                     <span class="string">"max_capacity"</span>.to_string(),
                 ],
                 <span class="bool-val">true</span>,
+                <span class="macro">vec!</span>[],
             ),
             deletion_request: PingType::new(
                 <span class="string">"deletion-request"</span>,
@@ -163,6 +170,7 @@
                 </span><span class="macro">vec!</span>[],
                 <span class="macro">vec!</span>[<span class="string">"at_init"</span>.to_string(), <span class="string">"set_upload_enabled"</span>.to_string()],
                 <span class="bool-val">true</span>,
+                <span class="macro">vec!</span>[],
             ),
         }
     }

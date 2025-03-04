@@ -64,21 +64,29 @@ module.</p>
 
     @classmethod
     def upload(
-        cls, url: str, data: bytes, headers: Dict[str, str]
+        cls, capable_request: CapablePingUploadRequest
     ) -&gt; Union[
         UploadResult,
         UploadResult.UNRECOVERABLE_FAILURE,
         UploadResult.RECOVERABLE_FAILURE,
         UploadResult.HTTP_STATUS,
+        UploadResult.INCAPABLE,
     ]:
         &#34;&#34;&#34;
         Synchronously upload a ping to a server.
 
         Args:
-            url (str): The URL path to upload the data to.
-            data (str): The serialized text data to send.
-            headers (dict of (str, str)): HTTP headers to send.
+            capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
         &#34;&#34;&#34;
+        # This uploader has no special capabilities.
+        request = capable_request.capable(lambda capabilities: len(capabilities) == 0)
+        if request is None:
+            return UploadResult.INCAPABLE(0)
+
+        url = request.url
+        data = request.body
+        headers = request.headers
+
         parsed_url = urllib.parse.urlparse(url)
         if parsed_url.scheme == &#34;http&#34;:
             conn = http.client.HTTPConnection(
@@ -140,18 +148,15 @@ to the user-provided delegate.</p></div>
 <h3>Static methods</h3>
 <dl>
 <dt id="glean.net.http_client.HttpClientUploader.upload"><code class="name flex">
-<span>def <span class="ident">upload</span></span>(<span>url: str, data: bytes, headers: Dict[str, str]) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS</span>
+<span>def <span class="ident">upload</span></span>(<span>capable_request: <a title="glean.net.ping_upload_worker.CapablePingUploadRequest" href="ping_upload_worker.html#glean.net.ping_upload_worker.CapablePingUploadRequest">CapablePingUploadRequest</a>) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS | glean._uniffi.glean.UploadResult.INCAPABLE</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Synchronously upload a ping to a server.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>The URL path to upload the data to.</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>str</code></dt>
-<dd>The serialized text data to send.</dd>
-</dl>
-<p>headers (dict of (str, str)): HTTP headers to send.</p></div>
+<dt><strong><code>capable_request</code></strong> :&ensp;<code>CapablePingUploadRequest</code></dt>
+<dd>The ping upload request, locked behind a capability check.</dd>
+</dl></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>

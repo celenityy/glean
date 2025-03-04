@@ -1680,7 +1680,7 @@ This will be automatically implemented for event properties of an [ObjectMetricT
 </dd>
 <dt id="glean.metrics.PingType"><code class="flex name class">
 <span>class <span class="ident">PingType</span></span>
-<span>(</span><span>name: str,<br>include_client_id: bool,<br>send_if_empty: bool,<br>precise_timestamps: bool,<br>include_info_sections: bool,<br>schedules_pings: List[str],<br>reason_codes: List[str],<br>enabled: bool = True,<br>follows_collection_enabled: bool = True)</span>
+<span>(</span><span>name: str,<br>include_client_id: bool,<br>send_if_empty: bool,<br>precise_timestamps: bool,<br>include_info_sections: bool,<br>schedules_pings: List[str],<br>reason_codes: List[str],<br>uploader_capabilities: List[str],<br>enabled: bool = True,<br>follows_collection_enabled: bool = True)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -1697,6 +1697,7 @@ This will be automatically implemented for event properties of an [ObjectMetricT
         include_info_sections: bool,
         schedules_pings: List[str],
         reason_codes: List[str],
+        uploader_capabilities: List[str],
         enabled: bool = True,
         follows_collection_enabled: bool = True,
     ):
@@ -1717,6 +1718,7 @@ This will be automatically implemented for event properties of an [ObjectMetricT
             schedules_pings,
             reason_codes,
             follows_collection_enabled,
+            uploader_capabilities,
         )
         self._test_callback = None  # type: Optional[Callable[[Optional[str]], None]]
 

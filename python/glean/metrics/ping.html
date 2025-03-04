@@ -48,7 +48,7 @@ el.replaceWith(d);
 <dl>
 <dt id="glean.metrics.ping.PingType"><code class="flex name class">
 <span>class <span class="ident">PingType</span></span>
-<span>(</span><span>name: str,<br>include_client_id: bool,<br>send_if_empty: bool,<br>precise_timestamps: bool,<br>include_info_sections: bool,<br>schedules_pings: List[str],<br>reason_codes: List[str],<br>enabled: bool = True,<br>follows_collection_enabled: bool = True)</span>
+<span>(</span><span>name: str,<br>include_client_id: bool,<br>send_if_empty: bool,<br>precise_timestamps: bool,<br>include_info_sections: bool,<br>schedules_pings: List[str],<br>reason_codes: List[str],<br>uploader_capabilities: List[str],<br>enabled: bool = True,<br>follows_collection_enabled: bool = True)</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -65,6 +65,7 @@ el.replaceWith(d);
         include_info_sections: bool,
         schedules_pings: List[str],
         reason_codes: List[str],
+        uploader_capabilities: List[str],
         enabled: bool = True,
         follows_collection_enabled: bool = True,
     ):
@@ -85,6 +86,7 @@ el.replaceWith(d);
             schedules_pings,
             reason_codes,
             follows_collection_enabled,
+            uploader_capabilities,
         )
         self._test_callback = None  # type: Optional[Callable[[Optional[str]], None]]
 

@@ -46,6 +46,46 @@ el.replaceWith(d);
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="glean.net.ping_uploader.CapablePingUploadRequest"><code class="flex name class">
+<span>class <span class="ident">CapablePingUploadRequest</span></span>
+<span>(</span><span>request: glean.net.ping_upload_worker.PingUploadRequest)</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CapablePingUploadRequest:
+    def __init__(self, request: PingUploadRequest) -&gt; None:
+        self.request = request
+
+    def capable(self, func: Callable[[List[str]], bool]) -&gt; Optional[PingUploadRequest]:
+        if func(self.request.uploader_capabilities):
+            return self.request
+
+        return None</code></pre>
+</details>
+<div class="desc"></div>
+<h3>Methods</h3>
+<dl>
+<dt id="glean.net.ping_uploader.CapablePingUploadRequest.capable"><code class="name flex">
+<span>def <span class="ident">capable</span></span>(<span>self, func: Callable[[List[str]], bool]) ‑> glean.net.ping_upload_worker.PingUploadRequest | None</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def capable(self, func: Callable[[List[str]], bool]) -&gt; Optional[PingUploadRequest]:
+    if func(self.request.uploader_capabilities):
+        return self.request
+
+    return None</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
 <dt id="glean.net.ping_uploader.PingUploader"><code class="flex name class">
 <span>class <span class="ident">PingUploader</span></span>
 <span>(</span><span>*args, **kwargs)</span>
@@ -57,20 +97,19 @@ el.replaceWith(d);
 </summary>
 <pre><code class="python">class PingUploader(Protocol):
     def upload(
-        self, url: str, data: bytes, headers: Dict[str, str]
+        self, capable_request: CapablePingUploadRequest
     ) -&gt; Union[
         UploadResult,
         UploadResult.UNRECOVERABLE_FAILURE,
         UploadResult.RECOVERABLE_FAILURE,
         UploadResult.HTTP_STATUS,
+        UploadResult.INCAPABLE,
     ]:
         &#34;&#34;&#34;
         Upload a ping to a server.
 
         Args:
-            url (str): The URL path to upload the data to.
-            data (bytes): The serialized data to send.
-            headers (dict of (str, str)): Dictionary of header entries.
+            capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
 
         Returns:
             result (UploadResult): the status code of the upload response.
@@ -114,7 +153,7 @@ Protocol classes can be generic, they are defined as::</p>
 <h3>Methods</h3>
 <dl>
 <dt id="glean.net.ping_uploader.PingUploader.upload"><code class="name flex">
-<span>def <span class="ident">upload</span></span>(<span>self, url: str, data: bytes, headers: Dict[str, str]) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS</span>
+<span>def <span class="ident">upload</span></span>(<span>self,<br>capable_request: <a title="glean.net.ping_upload_worker.CapablePingUploadRequest" href="ping_upload_worker.html#glean.net.ping_upload_worker.CapablePingUploadRequest">CapablePingUploadRequest</a>) ‑> glean._uniffi.glean.UploadResult | glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE | glean._uniffi.glean.UploadResult.HTTP_STATUS | glean._uniffi.glean.UploadResult.INCAPABLE</span>
 </code></dt>
 <dd>
 <details class="source">
@@ -122,20 +161,19 @@ Protocol classes can be generic, they are defined as::</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def upload(
-    self, url: str, data: bytes, headers: Dict[str, str]
+    self, capable_request: CapablePingUploadRequest
 ) -&gt; Union[
     UploadResult,
     UploadResult.UNRECOVERABLE_FAILURE,
     UploadResult.RECOVERABLE_FAILURE,
     UploadResult.HTTP_STATUS,
+    UploadResult.INCAPABLE,
 ]:
     &#34;&#34;&#34;
     Upload a ping to a server.
 
     Args:
-        url (str): The URL path to upload the data to.
-        data (bytes): The serialized data to send.
-        headers (dict of (str, str)): Dictionary of header entries.
+        capable_request (CapablePingUploadRequest): The ping upload request, locked behind a capability check.
 
     Returns:
         result (UploadResult): the status code of the upload response.
@@ -145,12 +183,9 @@ Protocol classes can be generic, they are defined as::</p>
 <div class="desc"><p>Upload a ping to a server.</p>
 <h2 id="args">Args</h2>
 <dl>
-<dt><strong><code>url</code></strong> :&ensp;<code>str</code></dt>
-<dd>The URL path to upload the data to.</dd>
-<dt><strong><code>data</code></strong> :&ensp;<code>bytes</code></dt>
-<dd>The serialized data to send.</dd>
+<dt><strong><code>capable_request</code></strong> :&ensp;<code><a title="glean.net.ping_uploader.CapablePingUploadRequest" href="#glean.net.ping_uploader.CapablePingUploadRequest">CapablePingUploadRequest</a></code></dt>
+<dd>The ping upload request, locked behind a capability check.</dd>
 </dl>
-<p>headers (dict of (str, str)): Dictionary of header entries.</p>
 <h2 id="returns">Returns</h2>
 <p>result (UploadResult): the status code of the upload response.</p></div>
 </dd>
@@ -201,6 +236,22 @@ Protocol classes can be generic, they are defined as::</p>
                 return False
             return True
     
+    class INCAPABLE:
+        unused: &#34;int&#34;
+
+        def __init__(self,unused: &#34;int&#34;):
+            self.unused = unused
+
+        def __str__(self):
+            return &#34;UploadResult.INCAPABLE(unused={})&#34;.format(self.unused)
+
+        def __eq__(self, other):
+            if not other.is_incapable():
+                return False
+            if self.unused != other.unused:
+                return False
+            return True
+    
     class HTTP_STATUS:
         code: &#34;int&#34;
 
@@ -241,6 +292,8 @@ Protocol classes can be generic, they are defined as::</p>
         return isinstance(self, UploadResult.RECOVERABLE_FAILURE)
     def is_unrecoverable_failure(self) -&gt; bool:
         return isinstance(self, UploadResult.UNRECOVERABLE_FAILURE)
+    def is_incapable(self) -&gt; bool:
+        return isinstance(self, UploadResult.INCAPABLE)
     def is_http_status(self) -&gt; bool:
         return isinstance(self, UploadResult.HTTP_STATUS)
     def is_done(self) -&gt; bool:
@@ -251,6 +304,7 @@ Protocol classes can be generic, they are defined as::</p>
 <ul class="hlist">
 <li>glean._uniffi.glean.UploadResult.DONE</li>
 <li>glean._uniffi.glean.UploadResult.HTTP_STATUS</li>
+<li>glean._uniffi.glean.UploadResult.INCAPABLE</li>
 <li>glean._uniffi.glean.UploadResult.RECOVERABLE_FAILURE</li>
 <li>glean._uniffi.glean.UploadResult.UNRECOVERABLE_FAILURE</li>
 </ul>
@@ -261,6 +315,10 @@ Protocol classes can be generic, they are defined as::</p>
 <div class="desc"></div>
 </dd>
 <dt id="glean.net.ping_uploader.UploadResult.HTTP_STATUS"><code class="name">var <span class="ident">HTTP_STATUS</span></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="glean.net.ping_uploader.UploadResult.INCAPABLE"><code class="name">var <span class="ident">INCAPABLE</span></code></dt>
 <dd>
 <div class="desc"></div>
 </dd>
@@ -298,6 +356,19 @@ Protocol classes can be generic, they are defined as::</p>
 </summary>
 <pre><code class="python">def is_http_status(self) -&gt; bool:
     return isinstance(self, UploadResult.HTTP_STATUS)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.net.ping_uploader.UploadResult.is_incapable"><code class="name flex">
+<span>def <span class="ident">is_incapable</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_incapable(self) -&gt; bool:
+    return isinstance(self, UploadResult.INCAPABLE)</code></pre>
 </details>
 <div class="desc"></div>
 </dd>
@@ -345,6 +416,12 @@ Protocol classes can be generic, they are defined as::</p>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="glean.net.ping_uploader.CapablePingUploadRequest" href="#glean.net.ping_uploader.CapablePingUploadRequest">CapablePingUploadRequest</a></code></h4>
+<ul class="">
+<li><code><a title="glean.net.ping_uploader.CapablePingUploadRequest.capable" href="#glean.net.ping_uploader.CapablePingUploadRequest.capable">capable</a></code></li>
+</ul>
+</li>
+<li>
 <h4><code><a title="glean.net.ping_uploader.PingUploader" href="#glean.net.ping_uploader.PingUploader">PingUploader</a></code></h4>
 <ul class="">
 <li><code><a title="glean.net.ping_uploader.PingUploader.upload" href="#glean.net.ping_uploader.PingUploader.upload">upload</a></code></li>
@@ -355,10 +432,12 @@ Protocol classes can be generic, they are defined as::</p>
 <ul class="">
 <li><code><a title="glean.net.ping_uploader.UploadResult.DONE" href="#glean.net.ping_uploader.UploadResult.DONE">DONE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.HTTP_STATUS" href="#glean.net.ping_uploader.UploadResult.HTTP_STATUS">HTTP_STATUS</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.INCAPABLE" href="#glean.net.ping_uploader.UploadResult.INCAPABLE">INCAPABLE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.RECOVERABLE_FAILURE" href="#glean.net.ping_uploader.UploadResult.RECOVERABLE_FAILURE">RECOVERABLE_FAILURE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.UNRECOVERABLE_FAILURE" href="#glean.net.ping_uploader.UploadResult.UNRECOVERABLE_FAILURE">UNRECOVERABLE_FAILURE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_done" href="#glean.net.ping_uploader.UploadResult.is_done">is_done</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_http_status" href="#glean.net.ping_uploader.UploadResult.is_http_status">is_http_status</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.is_incapable" href="#glean.net.ping_uploader.UploadResult.is_incapable">is_incapable</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_recoverable_failure" href="#glean.net.ping_uploader.UploadResult.is_recoverable_failure">is_recoverable_failure</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_unrecoverable_failure" href="#glean.net.ping_uploader.UploadResult.is_unrecoverable_failure">is_unrecoverable_failure</a></code></li>
 </ul>

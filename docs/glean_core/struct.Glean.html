@@ -24,7 +24,7 @@ ping.</p>
     ping_lifetime_max_time: <span class="number">2000</span>,
 };
 <span class="kw">let </span><span class="kw-2">mut </span>glean = Glean::new(cfg).unwrap();
-<span class="kw">let </span>ping = PingType::new(<span class="string">"sample"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="macro">vec!</span>[], <span class="macro">vec!</span>[], <span class="bool-val">true</span>);
+<span class="kw">let </span>ping = PingType::new(<span class="string">"sample"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="bool-val">true</span>, <span class="macro">vec!</span>[], <span class="macro">vec!</span>[], <span class="bool-val">true</span>, <span class="macro">vec!</span>[]);
 glean.register_ping_type(<span class="kw-2">&amp;</span>ping);
 
 <span class="kw">let </span>call_counter: CounterMetric = CounterMetric::new(CommonMetricData {

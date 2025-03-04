@@ -391,6 +391,21 @@
 <a href="#390" id="390">390</a>
 <a href="#391" id="391">391</a>
 <a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
 </pre></div><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -433,6 +448,9 @@
     <span class="doccomment">/// True when it follows the `collection_enabled` flag (aka `upload_enabled`) flag.
     /// Otherwise it needs to be enabled through `enabled_pings`.
     </span>follows_collection_enabled: AtomicBool,
+
+    <span class="doccomment">/// Ordered list of uploader capabilities required to upload this ping.
+    </span>uploader_capabilities: Vec&lt;String&gt;,
 }
 
 <span class="kw">impl </span>fmt::Debug <span class="kw">for </span>PingType {
@@ -450,6 +468,7 @@
                 <span class="string">"follows_collection_enabled"</span>,
                 <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.follows_collection_enabled.load(Ordering::Relaxed),
             )
+            .field(<span class="string">"uploader_capabilities"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.uploader_capabilities)
             .finish()
     }
 }
@@ -472,6 +491,7 @@
     /// * `enabled` - Whether or not this ping is enabled. Note: Data that would be sent on a disabled
     ///   ping will still be collected but is discarded rather than being submitted.
     /// * `reason_codes` - The valid reason codes for this ping.
+    /// * `uploader_capabilities` - The ordered list of capabilities this ping requires to be uploaded with.
     </span><span class="attr">#[allow(clippy::too_many_arguments)]
     </span><span class="kw">pub fn </span>new&lt;A: Into&lt;String&gt;&gt;(
         name: A,
@@ -483,6 +503,7 @@
         schedules_pings: Vec&lt;String&gt;,
         reason_codes: Vec&lt;String&gt;,
         follows_collection_enabled: bool,
+        uploader_capabilities: Vec&lt;String&gt;,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::new_internal(
             name,
@@ -494,6 +515,7 @@
             schedules_pings,
             reason_codes,
             follows_collection_enabled,
+            uploader_capabilities,
         )
     }
 
@@ -508,6 +530,7 @@
         schedules_pings: Vec&lt;String&gt;,
         reason_codes: Vec&lt;String&gt;,
         follows_collection_enabled: bool,
+        uploader_capabilities: Vec&lt;String&gt;,
     ) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>this = <span class="self">Self</span>(Arc::new(InnerPing {
             name: name.into(),
@@ -519,6 +542,7 @@
             schedules_pings,
             reason_codes,
             follows_collection_enabled: AtomicBool::new(follows_collection_enabled),
+            uploader_capabilities,
         }));
 
         <span class="comment">// Register this ping.
@@ -613,6 +637,11 @@
     <span class="doccomment">/// Reason codes that this ping can send.
     </span><span class="kw">pub fn </span>reason_codes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[String] {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.reason_codes
+    }
+
+    <span class="doccomment">/// The capabilities this ping requires to be uploaded under.
+    </span><span class="kw">pub fn </span>uploader_capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[String] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.uploader_capabilities
     }
 
     <span class="doccomment">/// Submits the ping for eventual uploading.
@@ -736,6 +765,7 @@
                         headers: <span class="prelude-val">Some</span>(ping.headers),
                         body_has_info_sections: <span class="self">self</span>.<span class="number">0</span>.include_info_sections,
                         ping_name: <span class="self">self</span>.<span class="number">0</span>.name.to_string(),
+                        uploader_capabilities: <span class="self">self</span>.<span class="number">0</span>.uploader_capabilities.clone(),
                     };
 
                     glean.upload_manager.enqueue_ping(glean, ping);
