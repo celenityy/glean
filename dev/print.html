@@ -2143,9 +2143,16 @@ The Glean SDK will be able to read previous formats if necessary.</p>
 <p>The <code>glean-core</code> Rust crate does not handle the ping upload directly.
 Network stacks vastly differ between platforms, applications and operating systems.
 The Glean SDK leverages the available platform capabilities to implement any network communication.</p>
-<p>Glean core controls all upload and coordinates the platform side with its own internals.
+<p><code>glean-core</code> controls all upload and coordinates the platform side with its own internals.
 All language bindings implement ping uploading around a common API and protocol.</p>
 <h2 id="the-upload-module-in-the-language-bindings"><a class="header" href="#the-upload-module-in-the-language-bindings">The upload module in the language bindings</a></h2>
+<div class="special-quote special-quote-info fa fa-info-circle"></div>
+<h2 id="note-1"><a class="header" href="#note-1">Note</a></h2>
+<blockquote>
+<p>This section is outdated.
+Most of the languages have now diverged, due to the many iterations, from this design.
+For example, in Kotlin, the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/net/BaseUploader.kt"><code>BaseUploader</code> is mostly empty</a> and its functionalities are spread in the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/scheduler/PingUploadWorker.kt"><code>PingUploadWorker</code></a>.</p>
+</blockquote>
 <pre class="mermaid">classDiagram
     class UploadResult {
     }
@@ -2160,6 +2167,15 @@ All language bindings implement ping uploading around a common API and protocol.
     class RecoverableFailure {
     }
 
+    class Incapable {
+    }
+
+    UploadResult &lt;|-- HttpResponse
+    UploadResult &lt;|-- UnrecoverableFailure
+    UploadResult &lt;|-- RecoverableFailure
+    UploadResult &lt;|-- Incapable
+</pre>
+<pre class="mermaid">classDiagram
     class PingUploader {
         &lt;&lt;interface&gt;&gt;
         +Upload() UploadResult
@@ -2175,9 +2191,6 @@ All language bindings implement ping uploading around a common API and protocol.
         +Upload() UploadResult
     }
 
-    UploadResult &lt;|-- HttpResponse
-    UploadResult &lt;|-- UnrecoverableFailure
-    UploadResult &lt;|-- RecoverableFailure
     PingUploader &lt;|-- HttpUploader
     PingUploader o-- BaseUploader
 
@@ -2195,12 +2208,9 @@ All language bindings implement ping uploading around a common API and protocol.
 </ul>
 <h3 id="httpclientuploader"><a class="header" href="#httpclientuploader"><code>HttpClientUploader</code></a></h3>
 <p>The <code>HttpClientUploader</code> is the default SDK-provided HTTP uploader. It acts as an adapter between the platform-specific upload library and the Glean upload APIs.</p>
-<blockquote>
-<p>Note that most of the languages have now diverged, due to the many iterations, from this design. For example, in Kotlin, the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/net/BaseUploader.kt"><code>BaseUploader</code> is mostly empty</a> and its functionalities are spread in the <a href="https://searchfox.org/glean/source/glean-core/android/src/main/java/mozilla/telemetry/glean/scheduler/PingUploadWorker.kt"><code>PingUploadWorker</code></a>.</p>
-</blockquote>
 <h2 id="upload-task-api"><a class="header" href="#upload-task-api">Upload task API</a></h2>
 <p>The following diagram visualizes the communication between Glean core (the Rust crate),
-a Glean language binding (e.g. the Kotlin or Swift implementation) and a Glean end point server.</p>
+a Glean language binding (e.g. the Kotlin or Swift implementation) and a Glean endpoint server.</p>
 <pre class="mermaid">sequenceDiagram
     participant Glean core
     participant Glean wrapper
@@ -2215,6 +2225,24 @@ a Glean language binding (e.g. the Kotlin or Swift implementation) and a Glean e
     Glean core-&gt;&gt;Glean wrapper: Task::Done
 </pre>
 <p>Glean core will take care of file management, cleanup, rescheduling and rate limiting<sup class="footnote-reference"><a href="#1">1</a></sup>.</p>
+<p>A <code>PingRequest</code> encapsulates everything to construct a request to be send to the Glean endpoint server.</p>
+<pre class="mermaid">classDiagram
+class PingRequest {
+    string document_id
+    string path
+    sequence&lt;u8&gt; body
+    record&lt;string&gt; headers
+    boolean body_has_info_sections
+    string ping_name
+    sequence&lt;string&gt; uploader_capabilities
+}
+</pre>
+<ul>
+<li>The final URL <strong>SHOULD</strong> be constructed by concatenating the configured server endpoint with the <code>path</code>.</li>
+<li><code>headers</code> is a map from header key to header value. An uploader <strong>MUST</strong> send those as HTTP headers.</li>
+<li><code>uploader_capabilities</code> is a list of requested capabilities for the given ping. An uploader <strong>MUST</strong> be able to fulfill all requested capabilities. Otherwise the request <strong>MUST</strong> be rejected with <code>Incapable</code></li>
+<li>The other fields <strong>MAY</strong> be used by an uploader to determine how to handle the request.</li>
+</ul>
 <div class="footnote-definition" id="1"><sup class="footnote-definition-label">1</sup>
 <p>Rate limiting is achieved by limiting the amount of times a language binding is allowed to get a <code>Task::Upload(PingRequest)</code> from <code>get_upload_task</code> in a given time interval. Currently, the default limit is for a maximum of 15 upload tasks every 60 seconds and there are no exposed methods that allow changing this default (follow <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1647630">Bug 1647630</a> for updates). If the caller has reached the maximum tasks for the current interval, they will get a <code>Task::Wait</code> regardless if there are other <code>Task::Upload(PingRequest)</code>s queued.</p>
 </div>
