@@ -1086,33 +1086,6 @@
 <a href="#1085" id="1085">1085</a>
 <a href="#1086" id="1086">1086</a>
 <a href="#1087" id="1087">1087</a>
-<a href="#1088" id="1088">1088</a>
-<a href="#1089" id="1089">1089</a>
-<a href="#1090" id="1090">1090</a>
-<a href="#1091" id="1091">1091</a>
-<a href="#1092" id="1092">1092</a>
-<a href="#1093" id="1093">1093</a>
-<a href="#1094" id="1094">1094</a>
-<a href="#1095" id="1095">1095</a>
-<a href="#1096" id="1096">1096</a>
-<a href="#1097" id="1097">1097</a>
-<a href="#1098" id="1098">1098</a>
-<a href="#1099" id="1099">1099</a>
-<a href="#1100" id="1100">1100</a>
-<a href="#1101" id="1101">1101</a>
-<a href="#1102" id="1102">1102</a>
-<a href="#1103" id="1103">1103</a>
-<a href="#1104" id="1104">1104</a>
-<a href="#1105" id="1105">1105</a>
-<a href="#1106" id="1106">1106</a>
-<a href="#1107" id="1107">1107</a>
-<a href="#1108" id="1108">1108</a>
-<a href="#1109" id="1109">1109</a>
-<a href="#1110" id="1110">1110</a>
-<a href="#1111" id="1111">1111</a>
-<a href="#1112" id="1112">1112</a>
-<a href="#1113" id="1113">1113</a>
-<a href="#1114" id="1114">1114</a>
 </pre></div><pre class="rust"><code><span class="comment">// This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
@@ -1392,13 +1365,11 @@
             // instantiate the core metrics.
             </span>glean.on_upload_enabled();
         } <span class="kw">else </span>{
-            <span class="comment">// If upload is disabled, and we've never run before, only set the
-            // client_id to KNOWN_CLIENT_ID, but do not send a deletion request
-            // ping.
-            // If we have run before, and if the client_id is not equal to
-            // the KNOWN_CLIENT_ID, do the full upload disabled operations to
-            // clear metrics, set the client_id to KNOWN_CLIENT_ID, and send a
-            // deletion request ping.
+            <span class="comment">// If upload is disabled, then clear the metrics
+            // but do not send a deletion request ping.
+            // If we have run before, and we have an old client_id,
+            // do the full upload disabled operations to clear metrics
+            // and send a deletion request ping.
             </span><span class="kw">match </span>glean
                 .core_metrics
                 .client_id
@@ -1406,7 +1377,17 @@
             {
                 <span class="prelude-val">None </span>=&gt; glean.clear_metrics(),
                 <span class="prelude-val">Some</span>(uuid) =&gt; {
-                    <span class="kw">if </span>uuid != <span class="kw-2">*</span>KNOWN_CLIENT_ID {
+                    <span class="kw">if </span>uuid == <span class="kw-2">*</span>KNOWN_CLIENT_ID {
+                        <span class="comment">// Previously Glean kept the KNOWN_CLIENT_ID stored.
+                        // Let's ensure we erase it now.
+                        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(data) = glean.data_store.as_ref() {
+                            <span class="kw">_ </span>= data.remove_single_metric(
+                                Lifetime::User,
+                                <span class="string">"glean_client_info"</span>,
+                                <span class="string">"client_id"</span>,
+                            );
+                        }
+                    } <span class="kw">else </span>{
                         <span class="comment">// Temporarily enable uploading so we can submit a
                         // deletion request ping.
                         </span>glean.upload_enabled = <span class="bool-val">true</span>;
@@ -1695,14 +1676,6 @@
         // so that it can't be accessed until this function is done.
         </span><span class="kw">let </span>_lock = <span class="self">self</span>.upload_manager.clear_ping_queue();
 
-        <span class="comment">// There is only one metric that we want to survive after clearing all
-        // metrics: first_run_date. Here, we store its value so we can restore
-        // it after clearing the metrics.
-        </span><span class="kw">let </span>existing_first_run_date = <span class="self">self
-            </span>.core_metrics
-            .first_run_date
-            .get_value(<span class="self">self</span>, <span class="string">"glean_client_info"</span>);
-
         <span class="comment">// Clear any pending pings that follow `collection_enabled`.
         </span><span class="kw">let </span>ping_maker = PingMaker::new();
         <span class="kw">let </span>disabled_pings = <span class="self">self
@@ -1720,8 +1693,7 @@
         // the effect of resetting those to their initial values.
         </span><span class="kw">if let </span><span class="prelude-val">Some</span>(data) = <span class="self">self</span>.data_store.as_ref() {
             <span class="kw">_ </span>= data.clear_lifetime_storage(Lifetime::User, <span class="string">"glean_internal_info"</span>);
-            <span class="kw">_ </span>= data.clear_lifetime_storage(Lifetime::User, <span class="string">"glean_client_info"</span>);
-            <span class="kw">_ </span>= data.clear_lifetime_storage(Lifetime::Application, <span class="string">"glean_client_info"</span>);
+            <span class="kw">_ </span>= data.remove_single_metric(Lifetime::User, <span class="string">"glean_client_info"</span>, <span class="string">"client_id"</span>);
             <span class="kw">for </span>(ping_name, ping) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.ping_registry {
                 <span class="kw">if </span>ping.follows_collection_enabled() {
                     <span class="kw">_ </span>= data.clear_ping_lifetime_storage(ping_name);
@@ -1738,33 +1710,7 @@
         // StorageEngineManager), since doing so would mean we would have to have the
         // application tell us again which experiments are active if telemetry is
         // re-enabled.
-
-        </span>{
-            <span class="comment">// We need to briefly set upload_enabled to true here so that `set`
-            // is not a no-op. This is safe, since nothing on the Rust side can
-            // run concurrently to this since we hold a mutable reference to the
-            // Glean object. Additionally, the pending pings have been cleared
-            // from disk, so the PingUploader can't wake up and start sending
-            // pings.
-            </span><span class="self">self</span>.upload_enabled = <span class="bool-val">true</span>;
-
-            <span class="comment">// Store a "dummy" KNOWN_CLIENT_ID in the client_id metric. This will
-            // make it easier to detect if pings were unintentionally sent after
-            // uploading is disabled.
-            </span><span class="self">self</span>.core_metrics
-                .client_id
-                .set_from_uuid_sync(<span class="self">self</span>, <span class="kw-2">*</span>KNOWN_CLIENT_ID);
-
-            <span class="comment">// Restore the first_run_date.
-            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(existing_first_run_date) = existing_first_run_date {
-                <span class="self">self</span>.core_metrics
-                    .first_run_date
-                    .set_sync_chrono(<span class="self">self</span>, existing_first_run_date);
-            }
-
-            <span class="self">self</span>.upload_enabled = <span class="bool-val">false</span>;
-        }
-    }
+    </span>}
 
     <span class="doccomment">/// Gets the application ID as specified on instantiation.
     </span><span class="kw">pub fn </span>get_application_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>str {
