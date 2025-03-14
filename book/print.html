@@ -352,15 +352,8 @@ Add this to your Gradle configuration:</p>
 </blockquote>
 <h3 id="dependency-for-local-testing"><a class="header" href="#dependency-for-local-testing">Dependency for local testing</a></h3>
 <p>Due to its use of a native library you will need additional setup to allow local testing.</p>
-<p>First add a new configuration to your <code>build.gradle</code>, just before your <code>dependencies</code>:</p>
-<pre><code class="language-Groovy">configurations {
-    jnaForTest
-}
-</code></pre>
-<p>Then add the following lines to your <code>dependencies</code> block:</p>
-<pre><code class="language-Groovy">jnaForTest &quot;net.java.dev.jna:jna:5.6.0@jar&quot;
-testImplementation files(configurations.jnaForTest.copyRecursive().files)
-testImplementation &quot;org.mozilla.telemetry:glean-forUnitTests:${project.ext.glean_version}&quot;
+<p>Add the following lines to your <code>dependencies</code> block:</p>
+<pre><code class="language-Groovy">testImplementation &quot;org.mozilla.telemetry:glean-forUnitTests:${project.ext.glean_version}&quot;
 </code></pre>
 <p><strong>Note:</strong> Always use <code>org.mozilla.telemetry:glean-forUnitTests</code>.
 This package is standalone and its version will be exported from the main Glean package automatically.</p>
@@ -13417,6 +13410,14 @@ Each ping has its own schedule to gather all its locally saved metrics and creat
 <ul>
 <li>BREAKING CHANGE: Pings now pass required uploader capabilities during upload (<a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1920732">bug 1920732</a>)</li>
 <li>BREAKING CHANGE: Glean won't clear <code>client_info</code> fields when collection gets disabled. The <code>client_id</code> will still be cleared. (<a href="https://github.com/mozilla/glean/pull/3068">#3068</a>)</li>
+</ul>
+</li>
+<li>Android
+<ul>
+<li>Updated Gradle to 8.13 (<a href="https://github.com/mozilla/glean/pull/3080">#3074</a>)</li>
+<li>Updated to Android NDK 28 and SDK 35 (<a href="https://github.com/mozilla/glean/pull/3080">#3074</a>)</li>
+<li>Updated Kotlin to version 2.1.10 (<a href="https://github.com/mozilla/glean/pull/3080">#3074</a>)</li>
+<li>Updated Android Gradle Plugin to 8.8.2 (<a href="https://github.com/mozilla/glean/pull/3080">#3074</a>)</li>
 </ul>
 </li>
 <li>Rust

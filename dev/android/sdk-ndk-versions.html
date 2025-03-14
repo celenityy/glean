@@ -184,22 +184,22 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="android-sdk--ndk-versions"><a class="header" href="#android-sdk--ndk-versions">Android SDK / NDK versions</a></h1>
-<p>The Glean SDK implementation is currently build against the following versions:</p>
+<p>The Glean SDK implementation requires the following Android SDK/NDK tooling:</p>
 <ul>
-<li>SDK API 34
+<li>SDK API 35
 <ul>
-<li>Look for <code>android-34</code> in the SDK manager</li>
-<li>or install with: <code>sdkmanager --verbose &quot;platforms;android-34&quot;</code></li>
+<li>Look for <code>android-35</code> in the SDK manager</li>
+<li>or install with: <code>sdkmanager --verbose &quot;platforms;android-35&quot;</code></li>
 </ul>
 </li>
 <li>Android Command line tools
 <ul>
-<li>Download link: <a href="https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip">https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip</a></li>
+<li>Download link: <a href="https://dl.google.com/android/repository/commandlinetools-linux-12700392_latest.zip">https://dl.google.com/android/repository/commandlinetools-linux-12700392_latest.zip</a></li>
 </ul>
 </li>
-<li>NDK r26
+<li>NDK r28
 <ul>
-<li>Download link: <a href="https://dl.google.com/android/repository/android-ndk-r26c-linux.zip">https://dl.google.com/android/repository/android-ndk-r26c-linux.zip</a></li>
+<li>Download link: <a href="https://dl.google.com/android/repository/android-ndk-r28-linux.zip">https://dl.google.com/android/repository/android-ndk-r28-linux.zip</a></li>
 </ul>
 </li>
 </ul>
@@ -217,16 +217,16 @@ All locations need to be updated on upgrades:</p>
 <ul>
 <li><code>.circleci/config.yml</code>
 <ul>
-<li><code>sdkmanager 'build-tools;34.0.0'</code></li>
+<li><code>sdkmanager 'build-tools;35.0.0'</code></li>
 <li><code>image: circleci/android:2024.01.1-browsers</code></li>
 </ul>
 </li>
 <li><code>taskcluster/docker/linux/Dockerfile</code>.
 <ul>
-<li><code>ENV ANDROID_BUILD_TOOLS &quot;34.0.0&quot;</code></li>
-<li><code>ENV ANDROID_SDK_VERSION &quot;11076708&quot;</code></li>
-<li><code>ENV ANDROID_PLATFORM_VERSION &quot;34&quot;</code></li>
-<li><code>ENV ANDROID_NDK_VERSION &quot;26.2.11394342&quot;</code></li>
+<li><code>ENV ANDROID_BUILD_TOOLS &quot;35.0.0&quot;</code></li>
+<li><code>ENV ANDROID_SDK_VERSION &quot;12700392&quot;</code></li>
+<li><code>ENV ANDROID_PLATFORM_VERSION &quot;35&quot;</code></li>
+<li><code>ENV ANDROID_NDK_VERSION &quot;28.0.13004108&quot;</code></li>
 </ul>
 </li>
 </ul>
