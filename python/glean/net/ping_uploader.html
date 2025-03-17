@@ -214,7 +214,7 @@ Protocol classes can be generic, they are defined as::</p>
             return &#34;UploadResult.RECOVERABLE_FAILURE(unused={})&#34;.format(self.unused)
 
         def __eq__(self, other):
-            if not other.is_recoverable_failure():
+            if not other.is_RECOVERABLE_FAILURE():
                 return False
             if self.unused != other.unused:
                 return False
@@ -230,7 +230,7 @@ Protocol classes can be generic, they are defined as::</p>
             return &#34;UploadResult.UNRECOVERABLE_FAILURE(unused={})&#34;.format(self.unused)
 
         def __eq__(self, other):
-            if not other.is_unrecoverable_failure():
+            if not other.is_UNRECOVERABLE_FAILURE():
                 return False
             if self.unused != other.unused:
                 return False
@@ -246,7 +246,7 @@ Protocol classes can be generic, they are defined as::</p>
             return &#34;UploadResult.INCAPABLE(unused={})&#34;.format(self.unused)
 
         def __eq__(self, other):
-            if not other.is_incapable():
+            if not other.is_INCAPABLE():
                 return False
             if self.unused != other.unused:
                 return False
@@ -262,7 +262,7 @@ Protocol classes can be generic, they are defined as::</p>
             return &#34;UploadResult.HTTP_STATUS(code={})&#34;.format(self.code)
 
         def __eq__(self, other):
-            if not other.is_http_status():
+            if not other.is_HTTP_STATUS():
                 return False
             if self.code != other.code:
                 return False
@@ -278,7 +278,7 @@ Protocol classes can be generic, they are defined as::</p>
             return &#34;UploadResult.DONE(unused={})&#34;.format(self.unused)
 
         def __eq__(self, other):
-            if not other.is_done():
+            if not other.is_DONE():
                 return False
             if self.unused != other.unused:
                 return False
@@ -286,16 +286,26 @@ Protocol classes can be generic, they are defined as::</p>
     
     
 
-    # For each variant, we have an `is_NAME` method for easily checking
+    # For each variant, we have `is_NAME` and `is_name` methods for easily checking
     # whether an instance is that variant.
+    def is_RECOVERABLE_FAILURE(self) -&gt; bool:
+        return isinstance(self, UploadResult.RECOVERABLE_FAILURE)
     def is_recoverable_failure(self) -&gt; bool:
         return isinstance(self, UploadResult.RECOVERABLE_FAILURE)
+    def is_UNRECOVERABLE_FAILURE(self) -&gt; bool:
+        return isinstance(self, UploadResult.UNRECOVERABLE_FAILURE)
     def is_unrecoverable_failure(self) -&gt; bool:
         return isinstance(self, UploadResult.UNRECOVERABLE_FAILURE)
+    def is_INCAPABLE(self) -&gt; bool:
+        return isinstance(self, UploadResult.INCAPABLE)
     def is_incapable(self) -&gt; bool:
         return isinstance(self, UploadResult.INCAPABLE)
+    def is_HTTP_STATUS(self) -&gt; bool:
+        return isinstance(self, UploadResult.HTTP_STATUS)
     def is_http_status(self) -&gt; bool:
         return isinstance(self, UploadResult.HTTP_STATUS)
+    def is_DONE(self) -&gt; bool:
+        return isinstance(self, UploadResult.DONE)
     def is_done(self) -&gt; bool:
         return isinstance(self, UploadResult.DONE)</code></pre>
 </details>
@@ -333,6 +343,71 @@ Protocol classes can be generic, they are defined as::</p>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="glean.net.ping_uploader.UploadResult.is_DONE"><code class="name flex">
+<span>def <span class="ident">is_DONE</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_DONE(self) -&gt; bool:
+    return isinstance(self, UploadResult.DONE)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.net.ping_uploader.UploadResult.is_HTTP_STATUS"><code class="name flex">
+<span>def <span class="ident">is_HTTP_STATUS</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_HTTP_STATUS(self) -&gt; bool:
+    return isinstance(self, UploadResult.HTTP_STATUS)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.net.ping_uploader.UploadResult.is_INCAPABLE"><code class="name flex">
+<span>def <span class="ident">is_INCAPABLE</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_INCAPABLE(self) -&gt; bool:
+    return isinstance(self, UploadResult.INCAPABLE)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.net.ping_uploader.UploadResult.is_RECOVERABLE_FAILURE"><code class="name flex">
+<span>def <span class="ident">is_RECOVERABLE_FAILURE</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_RECOVERABLE_FAILURE(self) -&gt; bool:
+    return isinstance(self, UploadResult.RECOVERABLE_FAILURE)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.net.ping_uploader.UploadResult.is_UNRECOVERABLE_FAILURE"><code class="name flex">
+<span>def <span class="ident">is_UNRECOVERABLE_FAILURE</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_UNRECOVERABLE_FAILURE(self) -&gt; bool:
+    return isinstance(self, UploadResult.UNRECOVERABLE_FAILURE)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
 <dt id="glean.net.ping_uploader.UploadResult.is_done"><code class="name flex">
 <span>def <span class="ident">is_done</span></span>(<span>self) ‑> bool</span>
 </code></dt>
@@ -435,6 +510,11 @@ Protocol classes can be generic, they are defined as::</p>
 <li><code><a title="glean.net.ping_uploader.UploadResult.INCAPABLE" href="#glean.net.ping_uploader.UploadResult.INCAPABLE">INCAPABLE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.RECOVERABLE_FAILURE" href="#glean.net.ping_uploader.UploadResult.RECOVERABLE_FAILURE">RECOVERABLE_FAILURE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.UNRECOVERABLE_FAILURE" href="#glean.net.ping_uploader.UploadResult.UNRECOVERABLE_FAILURE">UNRECOVERABLE_FAILURE</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.is_DONE" href="#glean.net.ping_uploader.UploadResult.is_DONE">is_DONE</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.is_HTTP_STATUS" href="#glean.net.ping_uploader.UploadResult.is_HTTP_STATUS">is_HTTP_STATUS</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.is_INCAPABLE" href="#glean.net.ping_uploader.UploadResult.is_INCAPABLE">is_INCAPABLE</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.is_RECOVERABLE_FAILURE" href="#glean.net.ping_uploader.UploadResult.is_RECOVERABLE_FAILURE">is_RECOVERABLE_FAILURE</a></code></li>
+<li><code><a title="glean.net.ping_uploader.UploadResult.is_UNRECOVERABLE_FAILURE" href="#glean.net.ping_uploader.UploadResult.is_UNRECOVERABLE_FAILURE">is_UNRECOVERABLE_FAILURE</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_done" href="#glean.net.ping_uploader.UploadResult.is_done">is_done</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_http_status" href="#glean.net.ping_uploader.UploadResult.is_http_status">is_http_status</a></code></li>
 <li><code><a title="glean.net.ping_uploader.UploadResult.is_incapable" href="#glean.net.ping_uploader.UploadResult.is_incapable">is_incapable</a></code></li>

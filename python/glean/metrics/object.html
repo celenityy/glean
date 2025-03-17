@@ -55,7 +55,7 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class ObjectMetric:
+<pre><code class="python">class ObjectMetric():
     _pointer: ctypes.c_void_p
     def __init__(self, meta: &#34;CommonMetricData&#34;):
         _UniffiConverterTypeCommonMetricData.check_lower(meta)

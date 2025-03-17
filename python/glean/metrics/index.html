@@ -99,7 +99,7 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class BooleanMetric:
+<pre><code class="python">class BooleanMetric():
     _pointer: ctypes.c_void_p
     def __init__(self, meta: &#34;CommonMetricData&#34;):
         _UniffiConverterTypeCommonMetricData.check_lower(meta)
@@ -301,7 +301,7 @@ el.replaceWith(d);
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class CounterMetric:
+<pre><code class="python">class CounterMetric():
     _pointer: ctypes.c_void_p
     def __init__(self, meta: &#34;CommonMetricData&#34;):
         _UniffiConverterTypeCommonMetricData.check_lower(meta)
@@ -1005,7 +1005,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
             return &#34;LabeledMetricData.COMMON(cmd={})&#34;.format(self.cmd)
 
         def __eq__(self, other):
-            if not other.is_common():
+            if not other.is_COMMON():
                 return False
             if self.cmd != other.cmd:
                 return False
@@ -1029,7 +1029,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
             return &#34;LabeledMetricData.CUSTOM_DISTRIBUTION(cmd={}, range_min={}, range_max={}, bucket_count={}, histogram_type={})&#34;.format(self.cmd, self.range_min, self.range_max, self.bucket_count, self.histogram_type)
 
         def __eq__(self, other):
-            if not other.is_custom_distribution():
+            if not other.is_CUSTOM_DISTRIBUTION():
                 return False
             if self.cmd != other.cmd:
                 return False
@@ -1055,7 +1055,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
             return &#34;LabeledMetricData.MEMORY_DISTRIBUTION(cmd={}, unit={})&#34;.format(self.cmd, self.unit)
 
         def __eq__(self, other):
-            if not other.is_memory_distribution():
+            if not other.is_MEMORY_DISTRIBUTION():
                 return False
             if self.cmd != other.cmd:
                 return False
@@ -1075,7 +1075,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
             return &#34;LabeledMetricData.TIMING_DISTRIBUTION(cmd={}, unit={})&#34;.format(self.cmd, self.unit)
 
         def __eq__(self, other):
-            if not other.is_timing_distribution():
+            if not other.is_TIMING_DISTRIBUTION():
                 return False
             if self.cmd != other.cmd:
                 return False
@@ -1085,14 +1085,22 @@ metric storage and rearrange them correctly in the ping.</p></div>
     
     
 
-    # For each variant, we have an `is_NAME` method for easily checking
+    # For each variant, we have `is_NAME` and `is_name` methods for easily checking
     # whether an instance is that variant.
+    def is_COMMON(self) -&gt; bool:
+        return isinstance(self, LabeledMetricData.COMMON)
     def is_common(self) -&gt; bool:
         return isinstance(self, LabeledMetricData.COMMON)
+    def is_CUSTOM_DISTRIBUTION(self) -&gt; bool:
+        return isinstance(self, LabeledMetricData.CUSTOM_DISTRIBUTION)
     def is_custom_distribution(self) -&gt; bool:
         return isinstance(self, LabeledMetricData.CUSTOM_DISTRIBUTION)
+    def is_MEMORY_DISTRIBUTION(self) -&gt; bool:
+        return isinstance(self, LabeledMetricData.MEMORY_DISTRIBUTION)
     def is_memory_distribution(self) -&gt; bool:
         return isinstance(self, LabeledMetricData.MEMORY_DISTRIBUTION)
+    def is_TIMING_DISTRIBUTION(self) -&gt; bool:
+        return isinstance(self, LabeledMetricData.TIMING_DISTRIBUTION)
     def is_timing_distribution(self) -&gt; bool:
         return isinstance(self, LabeledMetricData.TIMING_DISTRIBUTION)</code></pre>
 </details>
@@ -1125,6 +1133,58 @@ metric storage and rearrange them correctly in the ping.</p></div>
 </dl>
 <h3>Methods</h3>
 <dl>
+<dt id="glean.metrics.LabeledMetricData.is_COMMON"><code class="name flex">
+<span>def <span class="ident">is_COMMON</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_COMMON(self) -&gt; bool:
+    return isinstance(self, LabeledMetricData.COMMON)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.metrics.LabeledMetricData.is_CUSTOM_DISTRIBUTION"><code class="name flex">
+<span>def <span class="ident">is_CUSTOM_DISTRIBUTION</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_CUSTOM_DISTRIBUTION(self) -&gt; bool:
+    return isinstance(self, LabeledMetricData.CUSTOM_DISTRIBUTION)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.metrics.LabeledMetricData.is_MEMORY_DISTRIBUTION"><code class="name flex">
+<span>def <span class="ident">is_MEMORY_DISTRIBUTION</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_MEMORY_DISTRIBUTION(self) -&gt; bool:
+    return isinstance(self, LabeledMetricData.MEMORY_DISTRIBUTION)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
+<dt id="glean.metrics.LabeledMetricData.is_TIMING_DISTRIBUTION"><code class="name flex">
+<span>def <span class="ident">is_TIMING_DISTRIBUTION</span></span>(<span>self) ‑> bool</span>
+</code></dt>
+<dd>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def is_TIMING_DISTRIBUTION(self) -&gt; bool:
+    return isinstance(self, LabeledMetricData.TIMING_DISTRIBUTION)</code></pre>
+</details>
+<div class="desc"></div>
+</dd>
 <dt id="glean.metrics.LabeledMetricData.is_common"><code class="name flex">
 <span>def <span class="ident">is_common</span></span>(<span>self) ‑> bool</span>
 </code></dt>
@@ -1252,7 +1312,7 @@ metric storage and rearrange them correctly in the ping.</p></div>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class MemoryDistributionMetric:
+<pre><code class="python">class MemoryDistributionMetric():
     _pointer: ctypes.c_void_p
     def __init__(self, meta: &#34;CommonMetricData&#34;,memory_unit: &#34;MemoryUnit&#34;):
         _UniffiConverterTypeCommonMetricData.check_lower(meta)
@@ -1867,7 +1927,7 @@ A ping might not be sent afterwards, e.g. if the ping is otherwise empty (and
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class QuantityMetric:
+<pre><code class="python">class QuantityMetric():
     _pointer: ctypes.c_void_p
     def __init__(self, meta: &#34;CommonMetricData&#34;):
         _UniffiConverterTypeCommonMetricData.check_lower(meta)
@@ -2089,7 +2149,7 @@ A ping might not be sent afterwards, e.g. if the ping is otherwise empty (and
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class StringListMetric:
+<pre><code class="python">class StringListMetric():
     _pointer: ctypes.c_void_p
     def __init__(self, meta: &#34;CommonMetricData&#34;):
         _UniffiConverterTypeCommonMetricData.check_lower(meta)
@@ -3480,6 +3540,10 @@ previously registered in the metrics.yaml file.</p>
 <li><code><a title="glean.metrics.LabeledMetricData.CUSTOM_DISTRIBUTION" href="#glean.metrics.LabeledMetricData.CUSTOM_DISTRIBUTION">CUSTOM_DISTRIBUTION</a></code></li>
 <li><code><a title="glean.metrics.LabeledMetricData.MEMORY_DISTRIBUTION" href="#glean.metrics.LabeledMetricData.MEMORY_DISTRIBUTION">MEMORY_DISTRIBUTION</a></code></li>
 <li><code><a title="glean.metrics.LabeledMetricData.TIMING_DISTRIBUTION" href="#glean.metrics.LabeledMetricData.TIMING_DISTRIBUTION">TIMING_DISTRIBUTION</a></code></li>
+<li><code><a title="glean.metrics.LabeledMetricData.is_COMMON" href="#glean.metrics.LabeledMetricData.is_COMMON">is_COMMON</a></code></li>
+<li><code><a title="glean.metrics.LabeledMetricData.is_CUSTOM_DISTRIBUTION" href="#glean.metrics.LabeledMetricData.is_CUSTOM_DISTRIBUTION">is_CUSTOM_DISTRIBUTION</a></code></li>
+<li><code><a title="glean.metrics.LabeledMetricData.is_MEMORY_DISTRIBUTION" href="#glean.metrics.LabeledMetricData.is_MEMORY_DISTRIBUTION">is_MEMORY_DISTRIBUTION</a></code></li>
+<li><code><a title="glean.metrics.LabeledMetricData.is_TIMING_DISTRIBUTION" href="#glean.metrics.LabeledMetricData.is_TIMING_DISTRIBUTION">is_TIMING_DISTRIBUTION</a></code></li>
 <li><code><a title="glean.metrics.LabeledMetricData.is_common" href="#glean.metrics.LabeledMetricData.is_common">is_common</a></code></li>
 <li><code><a title="glean.metrics.LabeledMetricData.is_custom_distribution" href="#glean.metrics.LabeledMetricData.is_custom_distribution">is_custom_distribution</a></code></li>
 <li><code><a title="glean.metrics.LabeledMetricData.is_memory_distribution" href="#glean.metrics.LabeledMetricData.is_memory_distribution">is_memory_distribution</a></code></li>
