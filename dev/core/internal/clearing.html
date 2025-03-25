@@ -184,16 +184,11 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="clearing-metrics-when-disablingenabling-glean"><a class="header" href="#clearing-metrics-when-disablingenabling-glean">Clearing metrics when disabling/enabling Glean</a></h1>
-<p>When disabling upload (<code>Glean.setUploadEnabled(false)</code>), metrics are also cleared to prevent their storage on the local device, and lessen the likelihood
+<p>When disabling upload (<code>Glean.setCollectionEnabled(false)</code>), metrics are also cleared to prevent their storage on the local device, and lessen the likelihood
 of accidentally sending them.
-There are a couple of exceptions to this:</p>
+There is an exceptions to this:</p>
 <ul>
-<li>
-<p><code>first_run_date</code> is retained so it isn't reset if metrics are later re-enabled.</p>
-</li>
-<li>
-<p><code>client_id</code> is set to the special value <code>&quot;c0ffeec0-ffee-c0ff-eec0-ffeec0ffeec0&quot;</code>. This should make it possible to detect the error case when metrics are sent from a client that has been disabled.</p>
-</li>
+<li><code>first_run_date</code> is retained so it isn't reset if metrics are later re-enabled.</li>
 </ul>
 <p>When re-enabling metrics:</p>
 <ul>
