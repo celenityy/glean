@@ -5438,7 +5438,7 @@ It will be checked upon Glean initialization.</p>
 <p><a href="reference/metrics/event.html">Events</a>: Records events e.g. individual occurrences of user actions, say every time a view was open and from where.</p>
 </li>
 <li>
-<p><a href="reference/metrics/custom_distribution.html">Custom Distribution</a>: Used to record the distribution of a value that needs fine-grained control of how the histogram buckets are computed.  <strong>Custom distributions are only available for values that come from Gecko.</strong></p>
+<p><a href="reference/metrics/custom_distribution.html">Custom Distribution</a>: Used to record the distribution of a value that needs fine-grained control of how the histogram buckets are computed.</p>
 </li>
 <li>
 <p><a href="reference/metrics/quantity.html">Quantity</a>: Used to record a single non-negative integer value. For example, the width of the display in pixels.</p>
@@ -8140,6 +8140,19 @@ mozilla::glean::pages::page_load.AccumulateRawSamples(samples);
 </div>
 </div>
 </div>
+<h4 id="limits-13"><a class="header" href="#limits-13">Limits</a></h4>
+<ul>
+<li>Samples are limited to the maximum value for the given time unit.</li>
+<li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
+<li>Negative values are discarded and an <code>ErrorType::InvalidValue</code> is generated for each instance.</li>
+<li>Samples that are longer than maximum sample time for the given unit generate an <code>ErrorType::InvalidOverflow</code> error for each instance.</li>
+</ul>
+<h4 id="recorded-errors-13"><a class="header" href="#recorded-errors-13">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative timespan.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing/stopped timer is stopped again.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a time longer than the maximum for the given unit.</li>
+</ul>
 <h3 id="accumulatesinglesample"><a class="header" href="#accumulatesinglesample"><code>accumulateSingleSample</code></a></h3>
 <p>Accumulates a single signed sample and appends it to the metric. Prefer this
 for the common use case of having a single value to avoid having to pass
@@ -8209,14 +8222,14 @@ mozilla::glean::pages::page_load.AccumulateRawDuration(aDuration);
 </div>
 </div>
 </div>
-<h4 id="limits-13"><a class="header" href="#limits-13">Limits</a></h4>
+<h4 id="limits-14"><a class="header" href="#limits-14">Limits</a></h4>
 <ul>
 <li>Samples are limited to the maximum value for the given time unit.</li>
 <li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
 <li>Negative values are discarded and an <code>ErrorType::InvalidValue</code> is generated for each instance.</li>
 <li>Samples that are longer than maximum sample time for the given unit generate an <code>ErrorType::InvalidOverflow</code> error for each instance.</li>
 </ul>
-<h4 id="recorded-errors-13"><a class="header" href="#recorded-errors-13">Recorded errors</a></h4>
+<h4 id="recorded-errors-14"><a class="header" href="#recorded-errors-14">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative timespan.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing/stopped timer is stopped again.</li>
@@ -8335,6 +8348,57 @@ mozilla::glean::pages::page_load.Cancel(std::move(timerId));
 </div>
 </div>
 </div>
+<h3 id="startbuffer"><a class="header" href="#startbuffer"><code>startBuffer</code></a></h3>
+<p><strong>Experimental:</strong>
+Start a new histogram buffer associated with this custom distribution metric.</p>
+<p>A histogram buffer accumulates in-memory.
+Data is recorded into the metric when committed.
+No data is collected if the buffer is abandoned.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>Data is automatically committed on drop.</p>
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+let buffer = pages::page_load.start_buffer();
+
+for sample in load_times.iter() {
+  buffer.accumulate(sample);
+}
+
+// Explicit or implicit drop of `buffer` commits the data.
+drop(buffer);
+</code></pre>
+<p>No data is recorded when the buffer is abandoned.</p>
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+let buffer = pages::page_load.start_buffer();
+
+for sample in all_frames.iter() {
+  buffer.accumulate(sample);
+}
+
+buffer.abandon(); // No data is recorded.
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4 id="limits-15"><a class="header" href="#limits-15">Limits</a></h4>
+<ul>
+<li>Samples are limited to the maximum value for the given time unit.</li>
+<li>Samples that are longer than maximum sample time for the given unit generate an <code>ErrorType::InvalidOverflow</code> error for each instance.</li>
+</ul>
+<h4 id="recorded-errors-15"><a class="header" href="#recorded-errors-15">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a time longer than the maximum for the given unit.</li>
+</ul>
 <h2 id="testing-api-10"><a class="header" href="#testing-api-10">Testing API</a></h2>
 <h3 id="testgetvalue-8"><a class="header" href="#testgetvalue-8"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given timing distribution metric.<br />
@@ -8528,7 +8592,7 @@ The allowed values for <code>time_unit</code> are:</p>
 <li><code>hour</code></li>
 <li><code>day</code></li>
 </ul>
-<h2 id="limits-14"><a class="header" href="#limits-14">Limits</a></h2>
+<h2 id="limits-16"><a class="header" href="#limits-16">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>
@@ -8675,7 +8739,7 @@ auto timerId = mozilla::glean::devtools::cold_toolbox_open_delay
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-14"><a class="header" href="#recorded-errors-14">Recorded Errors</a></h4>
+<h4 id="recorded-errors-16"><a class="header" href="#recorded-errors-16">Recorded Errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
 <ul>
@@ -8718,7 +8782,7 @@ mozilla::glean::devtools::cold_toolbox_open_delay
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-15"><a class="header" href="#recorded-errors-15">Recorded errors</a></h4>
+<h4 id="recorded-errors-17"><a class="header" href="#recorded-errors-17">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing, cancelled, or already-stopped timer is stopped again.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
@@ -8760,7 +8824,7 @@ mozilla::glean::devtools::cold_toolbox_open_delay
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-16"><a class="header" href="#recorded-errors-16">Recorded errors</a></h4>
+<h4 id="recorded-errors-18"><a class="header" href="#recorded-errors-18">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
 <ul>
@@ -8812,7 +8876,7 @@ mozilla::glean::devtools::cold_toolbox_open_delay
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-17"><a class="header" href="#recorded-errors-17">Recorded errors</a></h4>
+<h4 id="recorded-errors-19"><a class="header" href="#recorded-errors-19">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative sample.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a sample longer than the maximum for the given <code>time_unit</code>.</li>
@@ -8866,7 +8930,7 @@ mozilla::glean::devtools::cold_toolbox_open_delay
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-18"><a class="header" href="#recorded-errors-18">Recorded errors</a></h4>
+<h4 id="recorded-errors-20"><a class="header" href="#recorded-errors-20">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative sample.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a sample longer than the maximum for the given <code>time_unit</code>.</li>
@@ -9036,7 +9100,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <li>What is the distribution of initial load times of devtools toolboxes, per tool?</li>
 <li>What is the distribution of how long it takes to load extensions' content scripts, by addon id?</li>
 </ul>
-<h2 id="limits-15"><a class="header" href="#limits-15">Limits</a></h2>
+<h2 id="limits-17"><a class="header" href="#limits-17">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds</p>
@@ -9157,9 +9221,55 @@ mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-19"><a class="header" href="#recorded-errors-19">Recorded errors</a></h4>
+<h4 id="recorded-errors-21"><a class="header" href="#recorded-errors-21">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative memory size.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a size larger than 1 TB.</li>
+</ul>
+<h3 id="startbuffer-1"><a class="header" href="#startbuffer-1"><code>startBuffer</code></a></h3>
+<p><strong>Experimental:</strong>
+Start a new histogram buffer associated with this custom distribution metric.</p>
+<p>A histogram buffer accumulates in-memory.
+Data is recorded into the metric when committed.
+No data is collected if the buffer is abandoned.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>Data is automatically committed on drop.</p>
+<pre><code class="language-Rust">use glean_metrics::memory;
+
+let buffer = memory::heap_allocated.start_buffer();
+
+for sample in used_memory.iter() {
+  buffer.accumulate(sample);
+}
+
+// Explicit or implicit drop of `buffer` commits the data.
+drop(buffer);
+</code></pre>
+<p>No data is recorded when the buffer is abandoned.</p>
+<pre><code class="language-Rust">use glean_metrics::memory;
+
+let buffer = memory::heap_allocated.start_buffer();
+
+for sample in used_memory.iter() {
+  buffer.accumulate(sample);
+}
+
+buffer.abandon(); // No data is recorded.
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4 id="recorded-errors-22"><a class="header" href="#recorded-errors-22">Recorded errors</a></h4>
+<ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a size larger than 1 TB.</li>
 </ul>
 <h2 id="testing-api-12"><a class="header" href="#testing-api-12">Testing API</a></h2>
@@ -9361,7 +9471,7 @@ The allowed values for <code>memory_unit</code> are:</p>
 <li><code>megabyte</code> (<code>= 2^20 = 1,048,576 bytes</code>)</li>
 <li><code>gigabyte</code> (<code>= 2^30 = 1,073,741,824 bytes</code>)</li>
 </ul>
-<h2 id="limits-16"><a class="header" href="#limits-16">Limits</a></h2>
+<h2 id="limits-18"><a class="header" href="#limits-18">Limits</a></h2>
 <ul>
 <li>The maximum memory size that can be recorded is 1 Terabyte (2<sup>40</sup> bytes).
 Larger sizes will be truncated to 1 Terabyte.</li>
@@ -9480,7 +9590,7 @@ mozilla::network::http_upload_bandwidth
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-20"><a class="header" href="#recorded-errors-20">Recorded Errors</a></h4>
+<h4 id="recorded-errors-23"><a class="header" href="#recorded-errors-23">Recorded Errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if recording a memory size that is negative or over 1 TB.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
@@ -9621,7 +9731,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <li>What is the distribution of upload bandwidth rates per HTTP protocol version?</li>
 <li>What is the distribution of bytes received per DOM network API?</li>
 </ul>
-<h2 id="limits-17"><a class="header" href="#limits-17">Limits</a></h2>
+<h2 id="limits-19"><a class="header" href="#limits-19">Limits</a></h2>
 <ul>
 <li>The maximum memory size that can be recorded is 1 Terabyte (2<sup>40</sup> bytes).
 Larger sizes will be truncated to 1 Terabyte.</li>
@@ -9769,7 +9879,7 @@ Glean.user.clientId.set(uuid);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-21"><a class="header" href="#recorded-errors-21">Recorded errors</a></h4>
+<h4 id="recorded-errors-24"><a class="header" href="#recorded-errors-24">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the value is set to a string that is not a UUID (only applies for dynamically-typed languages, such as Python).</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a non-string or non-UUID value is given.</li>
@@ -10027,7 +10137,7 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h4 id="recorded-errors-22"><a class="header" href="#recorded-errors-22">Recorded errors</a></h4>
+<h4 id="recorded-errors-25"><a class="header" href="#recorded-errors-25">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>:
 <ul>
@@ -10038,7 +10148,7 @@ search.template.setUrl(new URL(&quot;https://mysearchengine.com/&quot;));
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the URL passed is longer than 8192 characters (before encoding).</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a non-string value is given.</li>
 </ul>
-<h4 id="limits-18"><a class="header" href="#limits-18">Limits</a></h4>
+<h4 id="limits-20"><a class="header" href="#limits-20">Limits</a></h4>
 <ul>
 <li>Fixed maximum URL length: 8192. Longer URLs are truncated and recorded along with an <code>invalid_overflow</code> error.</li>
 </ul>
@@ -10278,7 +10388,7 @@ Glean.install.firstRun.set(value.getTime() * 1000);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-23"><a class="header" href="#recorded-errors-23">Recorded errors</a></h4>
+<h4 id="recorded-errors-26"><a class="header" href="#recorded-errors-26">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: setting the date time to an invalid value.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a non-Date object is given.</li>
@@ -10585,7 +10695,7 @@ Glean.views.loginOpened.record(extra);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-24"><a class="header" href="#recorded-errors-24">Recorded errors</a></h4>
+<h4 id="recorded-errors-27"><a class="header" href="#recorded-errors-27">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>:
 if any of the values in the <code>extras</code> object are greater than 500 bytes in length.
@@ -10801,7 +10911,7 @@ The <code>glean_parser</code> will reject any other lifetime.</p>
 <ul>
 <li>When and from where was the login view opened?</li>
 </ul>
-<h2 id="limits-19"><a class="header" href="#limits-19">Limits</a></h2>
+<h2 id="limits-21"><a class="header" href="#limits-21">Limits</a></h2>
 <ul>
 <li>In Glean.js the default value for <code>maxEvents</code> is 1. In all other SDKs it is 500.</li>
 <li>Once the <code>maxEvents</code> threshold is reached on the client an &quot;events&quot; ping is immediately sent. </li>
@@ -10872,6 +10982,14 @@ mozilla::glean::graphics::checkerboard_peak.AccumulateSamples({ 23 });
 </div>
 </div>
 </div>
+<h4 id="limits-22"><a class="header" href="#limits-22">Limits</a></h4>
+<ul>
+<li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
+</ul>
+<h4 id="recorded-errors-28"><a class="header" href="#recorded-errors-28">Recorded errors</a></h4>
+<ul>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative value.</li>
+</ul>
 <h3 id="accumulatesinglesample-2"><a class="header" href="#accumulatesinglesample-2"><code>accumulateSingleSample</code></a></h3>
 <p>Accumulates one sample and appends it to the metric.</p>
 <div class="tabs">
@@ -10915,14 +11033,56 @@ mozilla::glean::graphics::checkerboard_peak.AccumulateSingleSample(23);
 </div>
 </div>
 </div>
-<h4 id="limits-20"><a class="header" href="#limits-20">Limits</a></h4>
+<h4 id="limits-23"><a class="header" href="#limits-23">Limits</a></h4>
 <ul>
 <li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
 </ul>
-<h4 id="recorded-errors-25"><a class="header" href="#recorded-errors-25">Recorded errors</a></h4>
+<h4 id="recorded-errors-29"><a class="header" href="#recorded-errors-29">Recorded errors</a></h4>
 <ul>
-<li><code>invalid_value</code>: If recording a negative value.</li>
+<li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative value.</li>
 </ul>
+<h3 id="startbuffer-2"><a class="header" href="#startbuffer-2"><code>startBuffer</code></a></h3>
+<p><strong>Experimental:</strong>
+Start a new histogram buffer associated with this custom distribution metric.</p>
+<p>A histogram buffer accumulates in-memory.
+Data is recorded into the metric when committed.
+No data is collected if the buffer is abandoned.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>Data is automatically committed on drop.</p>
+<pre><code class="language-Rust">use glean_metrics::graphics;
+
+let buffer = graphics::checkerboard_peak.start_buffer();
+
+for sample in all_frames.iter() {
+  buffer.accumulate(sample);
+}
+
+// Explicit or implicit drop of `buffer` commits the data.
+drop(buffer);
+</code></pre>
+<p>No data is recorded when the buffer is abandoned.</p>
+<pre><code class="language-Rust">use glean_metrics::graphics;
+
+let buffer = graphics::checkerboard_peak.start_buffer();
+
+for sample in all_frames.iter() {
+  buffer.accumulate(sample);
+}
+
+buffer.abandon(); // No data is recorded.
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
 <h2 id="testing-api-18"><a class="header" href="#testing-api-18">Testing API</a></h2>
 <h3 id="testgetvalue-16"><a class="header" href="#testgetvalue-16"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given custom distribution metric.<br />
@@ -11213,7 +11373,7 @@ Glean.network.http3LateAckRatio[&quot;pto&quot;]
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-26"><a class="header" href="#recorded-errors-26">Recorded Errors</a></h4>
+<h4 id="recorded-errors-30"><a class="header" href="#recorded-errors-30">Recorded Errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if recording any negative samples</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
@@ -11264,7 +11424,7 @@ Glean.network.http3LateAckRatio[&quot;pto&quot;]
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-27"><a class="header" href="#recorded-errors-27">Recorded Errors</a></h4>
+<h4 id="recorded-errors-31"><a class="header" href="#recorded-errors-31">Recorded Errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if recording a negative sample</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_label</code></a>:
@@ -11412,7 +11572,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <li>What is the distribution of retransmission ratios per connection?</li>
 <li>What is the distribution of how long it takes to load extensions' content scripts, by addon id?</li>
 </ul>
-<h2 id="limits-21"><a class="header" href="#limits-21">Limits</a></h2>
+<h2 id="limits-24"><a class="header" href="#limits-24">Limits</a></h2>
 <ul>
 <li>The maximum value of <code>bucket_count</code> is 100.</li>
 <li>Only non-negative integer values may be recorded (<code>&gt;=0</code>).</li>
@@ -11494,11 +11654,11 @@ mozilla::glean::display::width.Set(innerWidth);
 </div>
 </div>
 </div>
-<h4 id="limits-22"><a class="header" href="#limits-22">Limits</a></h4>
+<h4 id="limits-25"><a class="header" href="#limits-25">Limits</a></h4>
 <ul>
 <li>Quantities must be non-negative integers or 0.</li>
 </ul>
-<h4 id="recorded-errors-28"><a class="header" href="#recorded-errors-28">Recorded errors</a></h4>
+<h4 id="recorded-errors-32"><a class="header" href="#recorded-errors-32">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if a negative value is passed in.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a floating point or non-number value is given.</li>
@@ -11692,11 +11852,11 @@ gfx::display.get(&quot;height&quot;).set(height);
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h4 id="limits-23"><a class="header" href="#limits-23">Limits</a></h4>
+<h4 id="limits-26"><a class="header" href="#limits-26">Limits</a></h4>
 <ul>
 <li>Quantities must be non-negative integers or 0.</li>
 </ul>
-<h4 id="recorded-errors-29"><a class="header" href="#recorded-errors-29">Recorded errors</a></h4>
+<h4 id="recorded-errors-33"><a class="header" href="#recorded-errors-33">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if a negative value is passed in.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a floating point or non-number value is given.</li>
@@ -11820,7 +11980,7 @@ index of the labels is used to report Gecko data through the Glean SDK.</p>
 <ul>
 <li>What are the dimensions of the display, in pixels?</li>
 </ul>
-<h2 id="limits-24"><a class="header" href="#limits-24">Limits</a></h2>
+<h2 id="limits-27"><a class="header" href="#limits-27">Limits</a></h2>
 <ul>
 <li>Labels must conform to the <a href="reference/metrics/index.html#label-format">label format</a>.</li>
 <li>Each label must have a maximum of 71 characters.</li>
@@ -11994,12 +12154,12 @@ Glean.network.httpConnectionError.addToDenominator(1);
 </div>
 </div>
 </div>
-<h4 id="recorded-errors-30"><a class="header" href="#recorded-errors-30">Recorded errors</a></h4>
+<h4 id="recorded-errors-34"><a class="header" href="#recorded-errors-34">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If either numerator or denominator is incremented by a negative value.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: If a floating point or non-number value is given.</li>
 </ul>
-<h4 id="limits-25"><a class="header" href="#limits-25">Limits</a></h4>
+<h4 id="limits-28"><a class="header" href="#limits-28">Limits</a></h4>
 <ul>
 <li>Numerator and Denominator only increment.</li>
 <li>Numerator and Denominator saturate at the largest value that can be represented as a 32-bit signed integer (<code>2147483647</code>).</li>
@@ -12252,7 +12412,7 @@ article.content.set(extractedText);
 <div data-lang="Firefox Desktop" class="tab"></div>
 </div>
 </div>
-<h4 id="limits-26"><a class="header" href="#limits-26">Limits</a></h4>
+<h4 id="limits-29"><a class="header" href="#limits-29">Limits</a></h4>
 <ul>
 <li>Text metrics can only be sent in <a href="reference/metrics/../../user/pings/custom.html">custom pings</a>.</li>
 <li>Text metrics are always of data collection category 3 (<code>web_activity</code>) or category 4 (<code>highly_sensitive</code>).</li>
@@ -12260,7 +12420,7 @@ article.content.set(extractedText);
 <li>Fixed maximum text length: 200 kilobytes.
 Longer text is truncated. This is measured in the number of bytes when the string is encoded in UTF-8.</li>
 </ul>
-<h4 id="recorded-errors-31"><a class="header" href="#recorded-errors-31">Recorded errors</a></h4>
+<h4 id="recorded-errors-35"><a class="header" href="#recorded-errors-35">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: if the text is too long.</li>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_type</code></a>: if a non-string value is given.</li>
@@ -12456,11 +12616,11 @@ Glean.party.balloons.set(balloons);
 </div>
 </div>
 </div>
-<h4 id="limits-27"><a class="header" href="#limits-27">Limits</a></h4>
+<h4 id="limits-30"><a class="header" href="#limits-30">Limits</a></h4>
 <ul>
 <li>Only objects matching the specified structure will be recorded</li>
 </ul>
-<h4 id="recorded-errors-32"><a class="header" href="#recorded-errors-32">Recorded errors</a></h4>
+<h4 id="recorded-errors-36"><a class="header" href="#recorded-errors-36">Recorded errors</a></h4>
 <ul>
 <li><a href="reference/metrics/../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: if the passed value doesn't match the predefined structure</li>
 </ul>

@@ -426,6 +426,19 @@ mozilla::glean::pages::page_load.AccumulateRawSamples(samples);
 </div>
 </div>
 </div>
+<h4 id="limits"><a class="header" href="#limits">Limits</a></h4>
+<ul>
+<li>Samples are limited to the maximum value for the given time unit.</li>
+<li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
+<li>Negative values are discarded and an <code>ErrorType::InvalidValue</code> is generated for each instance.</li>
+<li>Samples that are longer than maximum sample time for the given unit generate an <code>ErrorType::InvalidOverflow</code> error for each instance.</li>
+</ul>
+<h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative timespan.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing/stopped timer is stopped again.</li>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a time longer than the maximum for the given unit.</li>
+</ul>
 <h3 id="accumulatesinglesample"><a class="header" href="#accumulatesinglesample"><code>accumulateSingleSample</code></a></h3>
 <p>Accumulates a single signed sample and appends it to the metric. Prefer this
 for the common use case of having a single value to avoid having to pass
@@ -495,14 +508,14 @@ mozilla::glean::pages::page_load.AccumulateRawDuration(aDuration);
 </div>
 </div>
 </div>
-<h4 id="limits"><a class="header" href="#limits">Limits</a></h4>
+<h4 id="limits-1"><a class="header" href="#limits-1">Limits</a></h4>
 <ul>
 <li>Samples are limited to the maximum value for the given time unit.</li>
 <li>Only non-negative values may be recorded (<code>&gt;= 0</code>).</li>
 <li>Negative values are discarded and an <code>ErrorType::InvalidValue</code> is generated for each instance.</li>
 <li>Samples that are longer than maximum sample time for the given unit generate an <code>ErrorType::InvalidOverflow</code> error for each instance.</li>
 </ul>
-<h4 id="recorded-errors"><a class="header" href="#recorded-errors">Recorded errors</a></h4>
+<h4 id="recorded-errors-1"><a class="header" href="#recorded-errors-1">Recorded errors</a></h4>
 <ul>
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative timespan.</li>
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_state</code></a>: If a non-existing/stopped timer is stopped again.</li>
@@ -621,6 +634,57 @@ mozilla::glean::pages::page_load.Cancel(std::move(timerId));
 </div>
 </div>
 </div>
+<h3 id="startbuffer"><a class="header" href="#startbuffer"><code>startBuffer</code></a></h3>
+<p><strong>Experimental:</strong>
+Start a new histogram buffer associated with this custom distribution metric.</p>
+<p>A histogram buffer accumulates in-memory.
+Data is recorded into the metric when committed.
+No data is collected if the buffer is abandoned.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>Data is automatically committed on drop.</p>
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+let buffer = pages::page_load.start_buffer();
+
+for sample in load_times.iter() {
+  buffer.accumulate(sample);
+}
+
+// Explicit or implicit drop of `buffer` commits the data.
+drop(buffer);
+</code></pre>
+<p>No data is recorded when the buffer is abandoned.</p>
+<pre><code class="language-Rust">use glean_metrics::pages;
+
+let buffer = pages::page_load.start_buffer();
+
+for sample in all_frames.iter() {
+  buffer.accumulate(sample);
+}
+
+buffer.abandon(); // No data is recorded.
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4 id="limits-2"><a class="header" href="#limits-2">Limits</a></h4>
+<ul>
+<li>Samples are limited to the maximum value for the given time unit.</li>
+<li>Samples that are longer than maximum sample time for the given unit generate an <code>ErrorType::InvalidOverflow</code> error for each instance.</li>
+</ul>
+<h4 id="recorded-errors-2"><a class="header" href="#recorded-errors-2">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_overflow</code></a>: If recording a time longer than the maximum for the given unit.</li>
+</ul>
 <h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given timing distribution metric.<br />
@@ -814,7 +878,7 @@ The allowed values for <code>time_unit</code> are:</p>
 <li><code>hour</code></li>
 <li><code>day</code></li>
 </ul>
-<h2 id="limits-1"><a class="header" href="#limits-1">Limits</a></h2>
+<h2 id="limits-3"><a class="header" href="#limits-3">Limits</a></h2>
 <ul>
 <li>
 <p>Timings are recorded in nanoseconds.</p>

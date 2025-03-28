@@ -269,6 +269,52 @@ mozilla::glean::memory::heap_allocated.Accumulate(bytes / 1024);
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a negative memory size.</li>
 <li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a size larger than 1 TB.</li>
 </ul>
+<h3 id="startbuffer"><a class="header" href="#startbuffer"><code>startBuffer</code></a></h3>
+<p><strong>Experimental:</strong>
+Start a new histogram buffer associated with this custom distribution metric.</p>
+<p>A histogram buffer accumulates in-memory.
+Data is recorded into the metric when committed.
+No data is collected if the buffer is abandoned.</p>
+<div class="tabs">
+<div class="tabbar"></div>
+<div class="tabcontents">
+<div data-lang="Kotlin" class="tab"></div>
+<div data-lang="Java" class="tab"></div>
+<div data-lang="Swift" class="tab"></div>
+<div data-lang="Python" class="tab"></div>
+<div data-lang="Rust" class="tab">
+<p>Data is automatically committed on drop.</p>
+<pre><code class="language-Rust">use glean_metrics::memory;
+
+let buffer = memory::heap_allocated.start_buffer();
+
+for sample in used_memory.iter() {
+  buffer.accumulate(sample);
+}
+
+// Explicit or implicit drop of `buffer` commits the data.
+drop(buffer);
+</code></pre>
+<p>No data is recorded when the buffer is abandoned.</p>
+<pre><code class="language-Rust">use glean_metrics::memory;
+
+let buffer = memory::heap_allocated.start_buffer();
+
+for sample in used_memory.iter() {
+  buffer.accumulate(sample);
+}
+
+buffer.abandon(); // No data is recorded.
+</code></pre>
+</div>
+<div data-lang="JavaScript" class="tab"></div>
+<div data-lang="Firefox Desktop" class="tab"></div>
+</div>
+</div>
+<h4 id="recorded-errors-1"><a class="header" href="#recorded-errors-1">Recorded errors</a></h4>
+<ul>
+<li><a href="../../user/metrics/error-reporting.html"><code>invalid_value</code></a>: If recording a size larger than 1 TB.</li>
+</ul>
 <h2 id="testing-api"><a class="header" href="#testing-api">Testing API</a></h2>
 <h3 id="testgetvalue"><a class="header" href="#testgetvalue"><code>testGetValue</code></a></h3>
 <p>Gets the recorded value for a given memory distribution metric.<br />
