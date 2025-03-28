@@ -207,6 +207,11 @@ You can obtain a copy of the MPL at <a href="https://mozilla.org/MPL/2.0/">https
 <p><strong>Windows Note:</strong> On Windows, <code>make</code> is not available by default. While not required, installing <code>make</code> will allow you to use the convenience features in the <code>Makefile</code>.</p>
 </blockquote>
 <h2 id="running-the-rust-tests"><a class="header" href="#running-the-rust-tests">Running the Rust tests</a></h2>
+<p>For slightly faster Rust test runs and improved output use <a href="https://nexte.st/"><code>cargo nextest</code></a>.<br />
+The full Rust test suite can be run with the following command:</p>
+<pre><code>cargo nextest run --workspace
+</code></pre>
+<p>Alternatively the builtin test runner continues to work.</p>
 <p>The Rust tests may be run with the following command:</p>
 <pre><code>cargo test --all
 </code></pre>
@@ -221,6 +226,12 @@ This makes it harder to understand what's going on.
 For debugging you can force single-threaded tests:</p>
 <pre><code>cargo test -- --nocapture --test-threads=1
 </code></pre>
+<p>You can filter further which tests to run by substring matches.</p>
+<pre><code>cargo test -p glean-core --lib -- metrics
+</code></pre>
+<p>This runs all unit tests in the glean-core crate with <code>metrics</code> in the name.
+For RLB use <code>-p glean</code>.
+For integration tests use <code>--tests</code> instead of <code>--lib</code>.</p>
 <h2 id="running-the-kotlinandroid-tests"><a class="header" href="#running-the-kotlinandroid-tests">Running the Kotlin/Android tests</a></h2>
 <h3 id="from-the-command-line"><a class="header" href="#from-the-command-line">From the command line</a></h3>
 <p>The full Android test suite may be run from the command line with:</p>
